@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList } from "react-native"
 import { Card, Button } from "react-native-elements"
 import { db } from '../firebase'
 
-function CowList (){
+function CowList ({navigation}){
     const [cows, setCows] = useState([])    
 
     useEffect(() => {
@@ -43,6 +43,10 @@ function CowList (){
             <Text>Med Record: {item.medRecord}</Text>
             <Text>DOB: {item.dob}</Text>
             <Text>Sex: {item.sex}</Text>
+            <Text>Weight: {item.weight} kg</Text>
+            <Button title="View Details" onPress={() => navigation.navigate("Cow Details", {
+                cowId: item.id
+            })} />
             <Button title="X" onPress={() => deleteCow(item.id)} />
         </Card>
     )
@@ -65,9 +69,7 @@ const styles = StyleSheet.create({
       flex: 1
     },
     item: {
-      padding: 10,
-      marginVertical: 8,
-      marginHorizontal: 16,
+
     },
 })
   
