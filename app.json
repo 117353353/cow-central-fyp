@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "CowCentralReact",
-    "slug": "CowCentralReact",
+    "name": "cow-central",
+    "slug": "cow-central",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

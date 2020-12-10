@@ -1,16 +1,14 @@
 import React, { useState } from "react"
-import { StyleSheet, Button, View, TextInput, Picker } from "react-native"
+import { StyleSheet,  View, Picker } from "react-native"
+import { Card, Input, Button } from "react-native-elements"
 import { db } from '../firebase'
 
 const styles = StyleSheet.create({
-    textInput: {
-        height: 40, 
-        borderColor: 'gray', 
-        borderWidth: 1 
-    },
     picker: {
         height: 50, 
-        width: 150
+        width: "95%",
+        margin: "auto",
+        marginBottom: "15px"
     }
 })
 
@@ -31,18 +29,20 @@ function AddCow() {
     }
 
     return (
-        <View>
-            <TextInput
+        <Card>
+            <Input
                 style={styles.textInput}
                 onChangeText={text => setTagNum(text)}
                 value={tagNum}
+                label="Tag Number"
             />  
             
-             <TextInput
+             <Input
                 style={styles.textInput}
                 onChangeText={text => setMedRecord(text)}
                 value={medRecord}
                 multiline={true}
+                label="Med Record"
             />  
 
 
@@ -55,7 +55,7 @@ function AddCow() {
                 <Picker.Item label="Angus" value="Angus" />
             </Picker>
             <Button title="Add Cow" onPress={add} />          
-        </View>
+        </Card>
     )
 }
 

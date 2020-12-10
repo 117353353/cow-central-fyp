@@ -1,31 +1,49 @@
 import React, { useState, useEffect } from "react"
 import { View, Text, StyleSheet, FlatList } from "react-native"
+import { Card, Button } from "react-native-elements"
 import { db } from '../firebase'
-import CowListItem from "./CowListItem"
 
 function CowList (){
-    const [cows, setCows] = useState("")    
+    const [cows, setCows] = useState([])    
 
-    db.collection("cows").get()
+    useEffect(() => {
+      getCows()
+
+    }, [])
+
+    function getCows() {
+        db.collection("cows").get()
         .then(cows => {
             var listOfCows = []
             cows.forEach(cow => {
-                let tempCow 
-                tempCow = cow.data()
+                let tempCow = cow.data()
                 tempCow.id = cow.id
-                
                 listOfCows.push(tempCow)
             })
-
+            console.log(listOfCows)
             setCows(listOfCows)
         }).catch(error => {
             console.error(error.message)
         })
+    }
+
+    function deleteCow(id) {
+        db.collection("cows").doc(id).delete()
+            .then(() => {
+                getCows()
+                alert(`Cow ${id} deleted`)
+            }).catch(error => {
+                console.log(error.message)
+            })
+    }
    
     const renderItem = ({ item }) => (
-        <View style={styles.item}>
-            <Text>{item.id} | {item.breed} | {item.medRecord}</Text>
-        </View>
+        <Card style={styles.item}>
+            <Text>{item.id}</Text>
+            <Text>{item.breed}</Text> 
+            <Text>{item.medRecord}</Text>
+            <Button title="X" onPress={() => deleteCow(item.id)} />
+        </Card>
     )
 
     return(
@@ -34,7 +52,9 @@ function CowList (){
                 data={cows}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
-            />
+            /> 
+
+         
         </View>
     )
 }
@@ -44,7 +64,6 @@ const styles = StyleSheet.create({
       flex: 1
     },
     item: {
-      border: "1px solid grey",
       padding: 10,
       marginVertical: 8,
       marginHorizontal: 16,
