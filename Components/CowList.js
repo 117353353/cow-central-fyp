@@ -31,7 +31,6 @@ function CowList (){
         db.collection("cows").doc(id).delete()
             .then(() => {
                 getCows()
-                alert(`Cow ${id} deleted`)
             }).catch(error => {
                 console.log(error.message)
             })
@@ -39,9 +38,11 @@ function CowList (){
    
     const renderItem = ({ item }) => (
         <Card style={styles.item}>
-            <Text>{item.id}</Text>
-            <Text>{item.breed}</Text> 
-            <Text>{item.medRecord}</Text>
+            <Text>TagNum: {item.id}</Text>
+            <Text>Breed: {item.breed}</Text> 
+            <Text>Med Record: {item.medRecord}</Text>
+            <Text>DOB: {item.dob}</Text>
+            <Text>Sex: {item.sex}</Text>
             <Button title="X" onPress={() => deleteCow(item.id)} />
         </Card>
     )
