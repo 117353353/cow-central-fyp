@@ -8,8 +8,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AddCow from "./components/AddCow"
 import CowList from "./components/CowList"
 import CowDetails from "./Components/CowDetails"
+import Settings from "./Components/Settings"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
+import { Feather } from '@expo/vector-icons'; 
+import Signin from './Components/Signin';
+import CreateAccount from './Components/CreateAccount';
 
 const theme = {
   colors: {
@@ -28,12 +32,15 @@ const Stack = createStackNavigator();
 
 function TabNavigation() {
   return(
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="Cows">
       <Tab.Screen name="Add Cow" component={AddCow} options={{
         tabBarIcon: ({ color, size }) => (<AntDesign name="plussquareo" size={24} color="black" />)
       }} />
       <Tab.Screen name="Cows" component={CowList} options={{
         tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="cow" size={24} color="black" />)
+      }} />
+       <Tab.Screen name="Settings" component={Settings} options={{
+        tabBarIcon: ({ color, size }) => (<Feather name="settings" size={24} color="black" />)
       }} />
     </Tab.Navigator>
   )
@@ -42,10 +49,12 @@ function TabNavigation() {
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: true}} >
-          <Stack.Screen name="Main" options={{headerShown: false}} component={TabNavigation} />
-          <Stack.Screen name="Cow Details" component={CowDetails} />
+      <NavigationContainer>   
+        <Stack.Navigator initialRouteName="Main" screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Main" component={TabNavigation} />
+          <Stack.Screen name="Signin" component={Signin} />
+          <Stack.Screen name="Cow Details" options={{headerShown: true}} component={CowDetails} />
+          <Stack.Screen name="CreateAccount" component={CreateAccount} />
         </Stack.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>
@@ -60,5 +69,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    maxWidth: "50%"
   },
 })
