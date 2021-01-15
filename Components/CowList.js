@@ -24,32 +24,20 @@ function CowList ({navigation}){
 
         return () => unsubscribe()
     }, [])
-
-    function deleteCow(id) {
-        db.collection("cows").doc(id).delete()
-            .then(() => {
-                getCows()
-            }).catch(error => {
-                console.log(error.message)
-            })
-    }
    
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => navigation.navigate("Cow Details", {cowId: item.id})}>
             <Card style={styles.item}>
-                <Text h4 style={styles.text} style={styles.cardHeader}>
-                    {item.id}<AntDesign name="delete" size={26} color="black" onPress={() => deleteCow(item.id)} style={styles.deleteBtn}/>
-                </Text>
-                
-                <Card.Divider/>
                 <View style={styles.row}>
                     <View style={styles.column}>
+                        <Text style={styles.text}>Tag Number</Text>
                         <Text style={styles.text}>Med Record</Text>
                         <Text style={styles.text}>DOB</Text>
                         <Text style={styles.text}>Sex</Text>
                         <Text style={styles.text}>Weight</Text>
                     </View>
                     <View style={styles.column}>
+                        <Text style={styles.text}>{item.id}</Text>
                         <Text style={styles.text}>{item.medRecord}</Text>
                         <Text style={styles.text}>{item.dob}</Text>
                         <Text style={styles.text}>{item.sex}</Text>
@@ -75,8 +63,7 @@ function CowList ({navigation}){
 }
 
 const styles = StyleSheet.create({
-    list: {
-        minWidth: 600,
+    list: {       
         margin: "auto",
     },
     item: {
@@ -95,11 +82,10 @@ const styles = StyleSheet.create({
     column: {
         display: "flex",
         flexDirection: "column",
-        flexBasis: "100",
         flex: 1
     },
     deleteBtn: {
-        float: "right",
+       
 
     },
     cardHeader: {

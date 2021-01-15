@@ -7,13 +7,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import AddCow from "./components/AddCow"
 import CowList from "./components/CowList"
-import CowDetails from "./Components/CowDetails"
-import Settings from "./Components/Settings"
+import CowDetails from "./components/CowDetails"
+import Settings from "./components/Settings"
+import MilkRecording from "./components/MilkRecording"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
-import { Feather } from '@expo/vector-icons'; 
-import Signin from './Components/Signin';
-import CreateAccount from './Components/CreateAccount';
+import { Feather } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';  
+import Signin from './components/Signin';
+import CreateAccount from './components/CreateAccount';
 
 const theme = {
   colors: {
@@ -38,6 +40,9 @@ function TabNavigation() {
       }} />
       <Tab.Screen name="Cows" component={CowList} options={{
         tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="cow" size={24} color="black" />)
+      }} />
+      <Tab.Screen name="Milk Recording" component={MilkRecording} options={{
+        tabBarIcon: ({ color, size }) => (<Entypo name="bucket" size={24} color="black" />)
       }} />
        <Tab.Screen name="Settings" component={Settings} options={{
         tabBarIcon: ({ color, size }) => (<Feather name="settings" size={24} color="black" />)

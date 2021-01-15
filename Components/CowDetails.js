@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import {StyleSheet} from "react-native"
+import {StyleSheet, ScrollView, TouchableOpacity} from "react-native"
 import {Card, Text, Button, Input} from "react-native-elements"
 import {db} from "../firebase"
 import {Picker} from '@react-native-picker/picker';
@@ -10,7 +10,10 @@ const styles = StyleSheet.create({
         height: 50, 
         width: "100%",
         margin: "auto",
-        marginBottom: "15px"
+        marginBottom: 15
+    },
+    deleteBtn: {
+        padding: 0
     }
 })
 
@@ -55,64 +58,78 @@ function CowDetails({navigation, route}) {
         })
     }
 
+    function deleteCow() {
+        db.collection("cows").doc(tagNum).delete()
+            .then(() => {
+                navigation.goBack()
+            }).catch(error => {
+                console.log(error.message)
+            })
+    }
+
     return (
-        <Card>
-            <Input
-                style={styles.textInput}
-                value={tagNum}
-                label="Tag Number"
-                disabled={true}
-            />  
+        <ScrollView>
+            <Card>
+                <Input
+                    style={styles.textInput}
+                    value={tagNum}
+                    label="Tag Number"
+                    disabled={true}
+                />  
 
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setDob(text)}
-                value ={dob}
-                label="Date of Birth"
-            />  
+                <Input
+                    style={styles.textInput}
+                    onChangeText={text => setDob(text)}
+                    value ={dob}
+                    label="Date of Birth"
+                />  
 
-            <Picker
-                selectedValue={breed}
-                style={styles.picker}
-                onValueChange={(itemValue, itemIndex) =>
-                     setBreed(itemValue)
-                 }>
-                <Picker.Item label="Select Breed" value="" />
-                <Picker.Item label="Fresian" value="Fresian" />
-                <Picker.Item label="Angus" value="Angus" />
-                <Picker.Item label="Hereford" value="Hereford" />
-                <Picker.Item label="Charolais" value="Charolais" />
-            </Picker>
+                <Picker
+                    selectedValue={breed}
+                    style={styles.picker}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setBreed(itemValue)
+                    }>
+                    <Picker.Item label="Select Breed" value="" />
+                    <Picker.Item label="Fresian" value="Fresian" />
+                    <Picker.Item label="Angus" value="Angus" />
+                    <Picker.Item label="Hereford" value="Hereford" />
+                    <Picker.Item label="Charolais" value="Charolais" />
+                </Picker>
 
-            <Picker
-                selectedValue={sex}
-                style={styles.picker}
-                onValueChange={(itemValue, itemIndex) =>
-                     setSex(itemValue)
-                 }>
-                <Picker.Item label="Select Sex" value="" />
-                <Picker.Item label="Male" value="Male" />
-                <Picker.Item label="Female" value="Female" />
-            </Picker>
-                    
+                <Picker
+                    selectedValue={sex}
+                    style={styles.picker}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setSex(itemValue)
+                    }>
+                    <Picker.Item label="Select Sex" value="" />
+                    <Picker.Item label="Male" value="Male" />
+                    <Picker.Item label="Female" value="Female" />
+                </Picker>
+                        
 
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setWeight(text)}
-                value= {weight}
-                label="Weight"
-            />  
+                <Input
+                    style={styles.textInput}
+                    onChangeText={text => setWeight(text)}
+                    value= {weight}
+                    label="Weight"
+                />  
 
-             <Input
-                style={styles.textInput}
-                onChangeText={text => setMedRecord(text)}
-                value={medRecord}
-                multiline={true}
-                label="Medical Record"
-            />  
+                <Input
+                    style={styles.textInput}
+                    onChangeText={text => setMedRecord(text)}
+                    value={medRecord}
+                    multiline={true}
+                    label="Medical Record"
+                />  
 
-            <Button title="Save" onPress={update} />          
-        </Card>
+                <Button title="Save" onPress={update} />          
+            </Card>
+            <Card style={styles.deleteBtn}>
+                <Button onPress={deleteCow} title="Delete" />
+            </Card>
+        </ScrollView>
     )
 }
 

@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         height: 50, 
         width: "100%",
         margin: "auto",
-        marginBottom: "15px"
+        marginBottom: 15
     }
 })
 
