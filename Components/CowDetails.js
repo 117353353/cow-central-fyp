@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import {StyleSheet, ScrollView, TouchableOpacity} from "react-native"
+import {ScrollView, TouchableOpacity, StyleSheet} from "react-native"
 import {Card, Text, Button, Input} from "react-native-elements"
 import {db} from "../firebase"
 import {Picker} from '@react-native-picker/picker';

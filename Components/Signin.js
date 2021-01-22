@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {StyleSheet} from "react-native"
+import {StyleSheet } from "react-native"
 import {Card, Input, Button, Text} from "react-native-elements"
 import {auth} from "../firebase"
 
@@ -39,12 +39,11 @@ function Signin({navigation}){
         </Card>
     )   
 }
-
+  
 const styles = StyleSheet.create({
     textInput: {
         
     }
 })
-  
    
 export default Signin

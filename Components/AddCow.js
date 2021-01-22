@@ -90,16 +90,6 @@ function AddCow() {
                 multiline={true}
                 label="Medical Record"
             />  
-
-           {/*  <Picker
-                style={styles.picker}
-                onValueChange={(itemValue, itemIndex) => setBreed(itemValue)}
-                value={breed}
-                selectedValue={breed}
-            >
-                <Picker.Item label="Fresian" value="Fresian" />
-                <Picker.Item label="Angus" value="Angus" />
-            </Picker> */}
             <Button title="Add Cow" onPress={add} />          
         </Card>
     )

@@ -1,12 +1,22 @@
 import React, { useState } from "react"
+import { StyleSheet } from "react-native"
+import { Card, Input, Text } from "react-native-elements"
 
 const styles = StyleSheet.create({
 
 })
 
 function MilkRecording() {
+
     return (
-        <Card>
+        <Text>Under Contruction</Text>
+
+    )
+}
+
+export default MilkRecording
+
+        {/* <Card>
             <Input
                 style={styles.textInput}
                 onChangeText={text => setTagNum(text)}
@@ -22,8 +32,4 @@ function MilkRecording() {
             />  
   
             <Button title="Add Cow" onPress={add} />          
-        </Card>
-    )
-}
-
-export default MilkRecording
+        </Card> */}
