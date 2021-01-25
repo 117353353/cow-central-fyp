@@ -4,6 +4,7 @@ import TabNavigation from "./TabNavigation";
 import Signin from "./Signin"
 import CowDetails from "./CowDetails"
 import CreateAccount from "./CreateAccount" 
+import AddMilkRecording from "./AddMilkRecording";
 
 const Stack = createStackNavigator()
 
@@ -14,6 +15,7 @@ function StackNavigation() {
             <Stack.Screen name="Signin" component={Signin} />
             <Stack.Screen name="Cow Details" options={{headerShown: true}} component={CowDetails} />
             <Stack.Screen name="CreateAccount" component={CreateAccount} />
+            <Stack.Screen name="Add Milk Recording" component={AddMilkRecording} />
         </Stack.Navigator>
     )
 }

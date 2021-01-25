@@ -1,39 +1,56 @@
 import React, { useState } from "react"
-import { StyleSheet, ScrollView } from "react-native"
+import { StyleSheet, ScrollView, FlatList, TouchableOpacity, View } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
 import {db} from "../firebase"
+import ActionButton from 'react-native-action-button';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const styles = StyleSheet.create({
-
-})
-
-function MilkRecording() {
+function MilkRecording({navigation}) {
+    const [milkRecordings, setMilkRecordings] = useState([])
     const [cowId, setCowId] = useState(0)
-    const [date, setDate] = useState(0)
-    const [milkProduced, setMilkProduced] = useState(0)
-    const [protein, setProtein] = useState(0)
-    const [butterfat, setButterfat] = useState(0)
-    const [cellCount, setCellCount] = useState(0)
-    const [notes, setNotes] = useState("")
 
-    function addMilkRecording() {
-        db.collection("milkRecordings").doc().set({
-            cowId: cowId,
-            date: date,
-            milkProduced: milkProduced,
-            protein: protein,
-            butterfat: butterfat,
-            cellCount: cellCount,
-            notes: notes
-        }).then(() => {
-            alert("SUCCESS!")
-        }).catch(error => {
-            alert(error.message)
-        })
+    function getRecords() {
+        db.collection("milkRecordings").where("cowId", "==", cowId).get()
+            .then(docs => {
+                let temp = []
+                docs.forEach(doc => {
+                   temp.push(doc.data())
+                })
+                setMilkRecordings(temp)
+            })
+            .catch(error => {
+                console.log(error.message)
+            })
     }
 
+    const renderItem = ({ item }) => (
+        <TouchableOpacity>
+            <Card style={styles.item}>
+                <View style={styles.row}>
+                    <View style={styles.column}>
+                        <Text style={styles.text}>Date</Text>
+                        <Text style={styles.text}>Milk Volume</Text>
+                        <Text style={styles.text}>Protein</Text>
+                        <Text style={styles.text}>Butterfat</Text>
+                        <Text style={styles.text}>Cell Count</Text>
+                        <Text style={styles.text}>Notes</Text>
+                    </View>
+                    <View style={styles.column}>
+                        <Text style={styles.text}>{item.date}</Text>
+                        <Text style={styles.text}>{item.milkProduced}</Text>
+                        <Text style={styles.text}>{item.protein}</Text>
+                        <Text style={styles.text}>{item.butterfat}</Text>
+                        <Text style={styles.text}>{item.cellCount}</Text>
+                        <Text style={styles.text}>{item.notes}</Text>
+                    </View>    
+                </View>     
+            </Card>
+        </TouchableOpacity>
+       
+    )
+
     return (
-        <ScrollView>
+        <ScrollView style={{flex: 1}}>
             <Input
                 style={styles.textInput}
                 onChangeText={text => setCowId(text)}
@@ -41,44 +58,51 @@ function MilkRecording() {
                 label="Tag Number"
                 keyboardType="number-pad"
             />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setMilkProduced(text)}
-                value={milkProduced}
-                label="Volume of Milk Produced"
-                keyboardType="number-pad"
-
-            />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setProtein(text)}
-                value={protein}
-                label="Protein"
-                keyboardType="number-pad"
-            />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setButterfat(text)}
-                value={butterfat}
-                label="Butterfat"
-                keyboardType="number-pad"
-            />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setCellCount(text)}
-                value={cellCount}
-                label="Somatic Cell Count"
-            />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setNotes(text)}
-                value={notes}
-                label="Notes"
-                multiline={true}
-            />  
-            <Button title="Add Recording" onPress={addMilkRecording} />
+            <Button title="Show" onPress={getRecords} />
+            <FlatList
+                data={milkRecordings}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+                style={styles.list}
+            />      
+           <Button title="Add" onPress={() => navigation.navigate("Add Milk Recording")} /> 
         </ScrollView>
     )
 }
 
+const styles = StyleSheet.create({
+    container: {
+
+    },
+    list: {       
+        margin: "auto",
+    },
+    item: {
+        display: "flex",
+
+    },
+    text: {
+        fontSize: 20
+    },
+    row: {
+        display: "flex",
+        flexDirection: "row",
+        flexWrap: "wrap",
+        width: "100%"
+    },
+    column: {
+        display: "flex",
+        flexDirection: "column",
+        flex: 1
+    },
+    deleteBtn: {
+       
+
+    },
+    cardHeader: {
+        paddingBottom: 10,
+        paddingLeft: 5,
+        paddingRight: 5
+    }
+})
 export default MilkRecording
