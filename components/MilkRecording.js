@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { StyleSheet, ScrollView, FlatList, TouchableOpacity, View } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
 import {db} from "../firebase"
-import ActionButton from 'react-native-action-button';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 function MilkRecording({navigation}) {
@@ -65,12 +64,15 @@ function MilkRecording({navigation}) {
                 keyExtractor={item => item.id}
                 style={styles.list}
             />      
-           <Button title="Add" onPress={() => navigation.navigate("Add Milk Recording")} /> 
+           <Button title="Add" containerStyle={styles.fab} onPress={() => navigation.navigate("Add Milk Recording")} /> 
         </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
+    fab: {
+       
+    },
     container: {
 
     },
@@ -103,6 +105,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingLeft: 5,
         paddingRight: 5
-    }
+    },
 })
 export default MilkRecording

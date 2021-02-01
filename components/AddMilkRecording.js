@@ -2,8 +2,6 @@ import React, { useState } from "react"
 import { StyleSheet, ScrollView } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
 import {db} from "../firebase"
-import ActionButton from 'react-native-action-button';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
 

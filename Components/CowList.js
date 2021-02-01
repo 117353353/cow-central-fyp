@@ -5,7 +5,16 @@ import { db } from '../firebase'
 import { AntDesign } from '@expo/vector-icons'; 
 
 function CowList ({navigation}){
-    const [cows, setCows] = useState([])    
+    const [cows, setCows] = useState([])   
+    const [search, setSearch] = useState("")
+    const [filteredCows, setFilteredCows] = useState([])
+
+/*     useEffect(() => {
+        let result = cows.filter(cow => cow.sex == "Male")
+        console.log(result)
+    }, [search])
+ */
+
 
     useEffect(() => {
         // https://firebase.google.com/docs/firestore/query-data/listen#node.js_4
@@ -47,14 +56,20 @@ function CowList ({navigation}){
                 </View>     
             </Card>
         </TouchableOpacity>
-       
+ 
     )
 
     return(
         <ScrollView style={styles.container}>
-            <SearchBar containerStyle={{margin: 0}}/>
+            <SearchBar 
+                containerStyle={{margin: 0}}
+                value={search}
+                onChangeText={setSearch}
+
+            />
+
             <FlatList
-                data={cows}
+                data={cows}   
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
                 style={styles.list}
