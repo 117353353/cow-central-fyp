@@ -30,7 +30,7 @@ function CowDetails({navigation, route}) {
     }, [])
 
     function getCow() {
-        db.collection("cows").doc(route.params.cowId).get()
+        db.collection("cows").doc(route.params.tagNum).get()
         .then(doc => {
             setTagNum(doc.id)
             setDob(doc.data().dob)

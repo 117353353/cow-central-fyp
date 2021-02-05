@@ -49,29 +49,38 @@ function MilkRecording({navigation}) {
     )
 
     return (
-        <ScrollView style={{flex: 1}}>
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setCowId(text)}
-                value={cowId}
-                label="Tag Number"
-                keyboardType="number-pad"
-            />  
-            <Button title="Show" onPress={getRecords} />
-            <FlatList
-                data={milkRecordings}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-                style={styles.list}
-            />      
-           <Button title="Add" containerStyle={styles.fab} onPress={() => navigation.navigate("Add Milk Recording")} /> 
-        </ScrollView>
+        <>
+        
+            <ScrollView style={{flex: 1}}>
+                <Card>
+                    <Input
+                        style={styles.textInput}
+                        onChangeText={text => setCowId(text)}
+                        value={cowId}
+                        label="Tag Number"
+                        keyboardType="number-pad"
+                    />  
+                    <Button title="Show" onPress={getRecords} />
+                </Card>
+
+                <FlatList
+                    data={milkRecordings}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id}
+                    style={styles.list}
+                />      
+            </ScrollView>
+            <Button title="+" containerStyle={styles.fab} onPress={() => navigation.navigate("Add Milk Recording")} />
+        </>
     )
 }
 
 const styles = StyleSheet.create({
     fab: {
-       
+        position: "absolute",
+        bottom: 10,
+        right: 10,
+        width: 50
     },
     container: {
 

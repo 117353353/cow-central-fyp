@@ -6,7 +6,7 @@ function CalvingInfo() {
 
     return (
         <View>
-            <Text>Calving</Text>
+            <Text>Under Construction!</Text>
         </View>
     )
 }

@@ -5,7 +5,7 @@ import { Text } from "react-native-elements"
 function Home() {
     return (
         <View>
-            <Text>Home</Text>
+            <Text>Under construction!</Text>
         </View>
     )
 }

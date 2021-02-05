@@ -6,13 +6,11 @@ import StackNavigation from "./components/StackNavigation"
 
 const theme = {
   colors: {
-    primary: "#009FB7",
-    secondary: "#EFF1F3"
+    primary: "#8a91a5",
+    secondary: "orange"
   },
-  Button: {
-    titleStyle: {
-      
-    },
+  button: {
+    type: "outline",
   },
 };
 

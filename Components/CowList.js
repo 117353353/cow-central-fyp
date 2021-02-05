@@ -9,20 +9,13 @@ function CowList ({navigation}){
     const [search, setSearch] = useState("")
     const [filteredCows, setFilteredCows] = useState([])
 
-/*     useEffect(() => {
-        let result = cows.filter(cow => cow.sex == "Male")
-        console.log(result)
-    }, [search])
- */
-
-
     useEffect(() => {
         // https://firebase.google.com/docs/firestore/query-data/listen#node.js_4
         const unsubscribe = db.collection('cows').onSnapshot(querySnapshot => {
             let tempList = []
             querySnapshot.forEach(doc => {
                 let tempCow = doc.data()
-                tempCow.id = doc.id
+                tempCow.tagNum = doc.id
                 tempList.push(tempCow)
             })
             
@@ -34,9 +27,18 @@ function CowList ({navigation}){
 
         return () => unsubscribe()
     }, [])
+
+    useEffect(() => {
+        if(search.length > 0) {
+            let tempSearch = search.toLowerCase()
+            let result = cows.filter(cow => cow.tagNum.includes(tempSearch) || cow.weight == tempSearch || cow.sex.toLowerCase().includes(tempSearch) || cow.dob.includes(tempSearch) || cow.medRecord.toLowerCase().includes(tempSearch))
+            setFilteredCows(result)
+        } 
+
+    }, [search])
    
     const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate("Cow Details", {cowId: item.id})}>
+        <TouchableOpacity onPress={() => navigation.navigate("Cow Details", {tagNum: item.tagNum})}>
             <Card style={styles.item}>
                 <View style={styles.row}>
                     <View style={styles.column}>
@@ -47,7 +49,7 @@ function CowList ({navigation}){
                         <Text style={styles.text}>Weight</Text>
                     </View>
                     <View style={styles.column}>
-                        <Text style={styles.text}>{item.id}</Text>
+                        <Text style={styles.text}>{item.tagNum}</Text>
                         <Text style={styles.text}>{item.medRecord}</Text>
                         <Text style={styles.text}>{item.dob}</Text>
                         <Text style={styles.text}>{item.sex}</Text>
@@ -60,25 +62,34 @@ function CowList ({navigation}){
     )
 
     return(
-        <ScrollView style={styles.container}>
-            <SearchBar 
-                containerStyle={{margin: 0}}
-                value={search}
-                onChangeText={setSearch}
+        <>
+            <ScrollView style={styles.container}>
+                <SearchBar 
+                    containerStyle={{margin: 0}}
+                    value={search}
+                    onChangeText={setSearch}
 
-            />
+                />
 
-            <FlatList
-                data={cows}   
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-                style={styles.list}
-            />         
-        </ScrollView>
+                <FlatList
+                    data={search.length < 1 ? cows : filteredCows}   
+                    renderItem={renderItem}
+                    keyExtractor={item => item.tagNum}
+                    style={styles.list}
+                />         
+            </ScrollView>
+            <Button title="+" containerStyle={styles.fab}  onPress={() => navigation.navigate("Add Cow")}/>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
+    fab: {
+        position: "absolute",
+        bottom: 10,
+        right: 10,
+        width: 50
+    },
     container: {
 
     },

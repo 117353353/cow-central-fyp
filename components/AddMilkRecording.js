@@ -34,49 +34,52 @@ function AddMilkRecording() {
 
     return (
         <ScrollView style={{flex: 1}}>
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setCowId(text)}
-                value={cowId}
-                label="Tag Number"
-                keyboardType="number-pad"
-            />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setMilkProduced(text)}
-                value={milkProduced}
-                label="Volume of Milk Produced"
-                keyboardType="number-pad"
+            <Card>
+                <Input
+                    style={styles.textInput}
+                    onChangeText={text => setCowId(text)}
+                    value={cowId}
+                    label="Tag Number"
+                    keyboardType="number-pad"
+                />  
+                <Input
+                    style={styles.textInput}
+                    onChangeText={text => setMilkProduced(text)}
+                    value={milkProduced}
+                    label="Volume of Milk Produced"
+                    keyboardType="number-pad"
 
-            />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setProtein(text)}
-                value={protein}
-                label="Protein"
-                keyboardType="number-pad"
-            />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setButterfat(text)}
-                value={butterfat}
-                label="Butterfat"
-                keyboardType="number-pad"
-            />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setCellCount(text)}
-                value={cellCount}
-                label="Somatic Cell Count"
-            />  
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setNotes(text)}
-                value={notes}
-                label="Notes"
-                multiline={true}
-            />  
-            <Button title="Add Recording" onPress={addRecord} />
+                />  
+                <Input
+                    style={styles.textInput}
+                    onChangeText={text => setProtein(text)}
+                    value={protein}
+                    label="Protein"
+                    keyboardType="number-pad"
+                />  
+                <Input
+                    style={styles.textInput}
+                    onChangeText={text => setButterfat(text)}
+                    value={butterfat}
+                    label="Butterfat"
+                    keyboardType="number-pad"
+                />  
+                <Input
+                    style={styles.textInput}
+                    onChangeText={text => setCellCount(text)}
+                    value={cellCount}
+                    label="Somatic Cell Count"
+                />  
+                <Input
+                    style={styles.textInput}
+                    onChangeText={text => setNotes(text)}
+                    value={notes}
+                    label="Notes"
+                    multiline={true}
+                />  
+                <Button title="Add Recording" onPress={addRecord} />
+            </Card>
+            
         </ScrollView>
     )
 }
