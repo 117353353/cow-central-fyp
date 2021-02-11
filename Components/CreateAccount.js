@@ -1,12 +1,17 @@
+//Import libraries
 import React, {useState} from "react";
 import {StyleSheet} from "react-native"
 import {Card, Input, Button, Text} from "react-native-elements"
 import {auth} from '../firebase'
 
+//creating variables
 function CreateAccount({navigation}){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    
+    //function build into firebase 
+    //https://firebase.google.com/docs/auth/web/password-auth
     function signUp(){
         auth.createUserWithEmailAndPassword(email, password)
             .then(() => {

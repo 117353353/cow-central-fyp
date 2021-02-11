@@ -1,7 +1,10 @@
+//import libraries from external source so they are recognised
 import firebase from "firebase"
 import "firebase/auth"
 import "firebase/firestore"
 
+
+//Values generated from firestore and connect the database to the project 
 var firebaseConfig = {
     apiKey: "AIzaSyAbfPcTjv0MOgG8BtpNHcSXfups4YiqDrs",
     authDomain: "cow-central.firebaseapp.com",
@@ -14,5 +17,7 @@ var firebaseConfig = {
   
 firebase.initializeApp(firebaseConfig)
 
+
+//so I can import the database in other components
 export const auth = firebase.auth()
 export const db = firebase.firestore()

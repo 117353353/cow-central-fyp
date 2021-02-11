@@ -1,12 +1,18 @@
+//Import libraries
 import React, {useState} from "react";
 import {StyleSheet } from "react-native"
 import {Card, Input, Button, Text} from "react-native-elements"
+
+// Links to the authorisation framework for firebase
 import {auth} from "../firebase"
 
+//Creating the variables
 function Signin({navigation}){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+//https://firebase.google.com/docs/auth/web/password-auth
+//uses authorization framework from firstore
     function signIn() {
         auth.signInWithEmailAndPassword(email, password)
             .then(() => {
@@ -38,12 +44,12 @@ function Signin({navigation}){
             <Text onPress={() => navigation.navigate("CreateAccount")}>Create Account</Text>
         </Card>
     )   
-}
+    }
   
-const styles = StyleSheet.create({
+    const styles = StyleSheet.create({
     textInput: {
         
     }
-})
+    })
    
-export default Signin
+    export default Signin

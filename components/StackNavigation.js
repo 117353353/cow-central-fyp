@@ -1,5 +1,9 @@
+//Import libraries
 import React from "react";
 import { createStackNavigator } from '@react-navigation/stack';
+
+//Importing the components
+
 import TabNavigation from "./TabNavigation";
 import Signin from "./Signin"
 import CowDetails from "./CowDetails"
@@ -9,9 +13,12 @@ import AddCow from "./AddCow";
 
 const Stack = createStackNavigator()
 
+/*Stack navigation is required in React native as it tells ths system how to navigate to the different pages contained in the app. 
+Reference = https://reactnavigation.org/docs/stack-navigator/ */
+
 function StackNavigation() {
     return(
-        <Stack.Navigator initialRouteName="Main" screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="Signin" screenOptions={{headerShown: false}}>
             <Stack.Screen name="Main" component={TabNavigation} />
             <Stack.Screen name="Signin" component={Signin} />
             <Stack.Screen name="Add Cow"  options={{headerShown: true}} component={AddCow} />
@@ -20,6 +27,7 @@ function StackNavigation() {
             <Stack.Screen name="Add Milk Recording" options={{headerShown: true}} component={AddMilkRecording} />
         </Stack.Navigator>
     )
-}
 
+}
+//allows me to import this elsewhere if require. can be used as component.
 export default StackNavigation;

@@ -1,7 +1,8 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-// My components.
+// My components (i.e references to each page for the tabs)
+
 import AddCow from "./AddCow"
 import CowList from "./CowList"
 import MilkRecording from "./MilkRecording"
@@ -9,7 +10,8 @@ import CalvingInfo from "./CalvingInfo"
 import Settings from "./Settings" 
 import Home from "./Home";
 
-// Icons. 
+// Icons  The icons displayed for each tab were got from = https://icons.expo.fyi/   */ 
+
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
 import { Feather } from '@expo/vector-icons';
@@ -19,13 +21,16 @@ import { FontAwesome } from '@expo/vector-icons';
 
 
 const Tab = createBottomTabNavigator();
+/*Tba navigaion appear along the bottom of the application and allow easy naviagtion for the user between forms. Each tab is created
+along with its size and colour. reference = https://reactnavigation.org/docs/tab-based-navigation/  The icons displayed for each tab 
+were got from = https://icons.expo.fyi/*/ 
 
 function TabNavigation() {
     const size = 24;
     const color = "black";
 
     return(
-        <Tab.Navigator initialRouteName="Cows">
+        <Tab.Navigator initialRouteName="Home">
             <Tab.Screen name="Home" component={Home} options={{
                 tabBarIcon: ({ color, size }) => (<FontAwesome name="home" size={size} color={color} />)
             }} />
@@ -45,4 +50,5 @@ function TabNavigation() {
     )
 }
 
+//allows me to import this elsewhere if require. can be used as component.
 export default TabNavigation;

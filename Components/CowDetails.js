@@ -1,10 +1,19 @@
+//importing the relevat items so they can be recognised 
 import React, {useState, useEffect} from "react"
 import {ScrollView, TouchableOpacity, StyleSheet} from "react-native"
 import {Card, Text, Button, Input} from "react-native-elements"
+
+//linking the form to the database 
 import {db} from "../firebase"
+
+//Import picker library
 import {Picker} from '@react-native-picker/picker';
+
+//importing 
 import AddCow from "./AddCow"
 
+
+// stylesheet determines the styling on the form
 const styles = StyleSheet.create({
     picker: {
         height: 50, 
@@ -17,6 +26,10 @@ const styles = StyleSheet.create({
     }
 })
 
+
+// Use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
+// They are updated automatically as the user types into the form. 
+
 function CowDetails({navigation, route}) {
     const [tagNum, setTagNum] = useState("")
     const [dob, setDob] = useState("")
@@ -25,11 +38,17 @@ function CowDetails({navigation, route}) {
     const [weight, setWeight] = useState("")  
     const [sex, setSex] = useState("")
 
+    // https://reactjs.org/docs/hooks-effect.html
+    //useffect stops function being called every time component is refreshed
     useEffect(() => {
         getCow()
     }, [])
-
-    function getCow() {
+    
+//https://firebase.google.com/docs/firestore/query-data/get-data
+// Retrieving a single document from the database using tag num, each cow has a single document which is identiable by their tag number. (The documents name is the cows tag number)
+// Route.params contains the values we sent from CowList e.g navigation.navigate("CowDetails", {tagNum})
+// Updates state variables with value retrieved from database 
+function getCow() {
         db.collection("cows").doc(route.params.tagNum).get()
         .then(doc => {
             setTagNum(doc.id)
@@ -43,6 +62,7 @@ function CowDetails({navigation, route}) {
         })
     }
 
+    //This function updates the database with the variables which ay have changed.
     function update() {
         db.collection("cows").doc(tagNum).set({
            breed : breed,
@@ -51,6 +71,7 @@ function CowDetails({navigation, route}) {
            weight : weight,
            sex : sex,
         }).then(() => {
+            // Redirects back to previous page. 
             navigation.goBack()
             alert("Updated Successfully")
         }).catch(error => {
@@ -58,6 +79,7 @@ function CowDetails({navigation, route}) {
         })
     }
 
+    //function which deletes the cow record from the database  
     function deleteCow() {
         db.collection("cows").doc(tagNum).delete()
             .then(() => {
@@ -66,6 +88,11 @@ function CowDetails({navigation, route}) {
                 console.log(error.message)
             })
     }
+
+    
+    //Scrollview expands to its content, allowing user to scroll down the page. 
+    //The card created here allow the user to input the milk recording results.
+    //The keyboard type as a form of error handling to limit the type of imput that can be imputed
 
     return (
         <ScrollView>
@@ -133,4 +160,5 @@ function CowDetails({navigation, route}) {
     )
 }
 
+//allows me to import this elsewhere if require. can be used as component.
 export default CowDetails

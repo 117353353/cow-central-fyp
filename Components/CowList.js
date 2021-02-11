@@ -1,14 +1,22 @@
+///Import libraries
 import React, { useState, useEffect } from "react"
 import { View, ScrollView, StyleSheet, FlatList, TouchableOpacity } from "react-native"
 import { Card, Button, Text, SearchBar } from "react-native-elements"
 import { db } from '../firebase'
 import { AntDesign } from '@expo/vector-icons'; 
 
-function CowList ({navigation}){
-    const [cows, setCows] = useState([])   
-    const [search, setSearch] = useState("")
-    const [filteredCows, setFilteredCows] = useState([])
 
+//Sets variables for the component
+function CowList ({navigation}){
+    const [cows, setCows] = useState([])  
+    const [filteredCows, setFilteredCows] = useState([]) 
+    const [search, setSearch] = useState("")
+
+    /* 
+        Useffect prevents function from being called multiple times
+         On snapshot listens for changes in the cows collection. If any document in cows is updated/deleted/added, 
+        this code will run again, instantly updating the list of cows.
+    */ 
     useEffect(() => {
         // https://firebase.google.com/docs/firestore/query-data/listen#node.js_4
         const unsubscribe = db.collection('cows').onSnapshot(querySnapshot => {
@@ -19,24 +27,33 @@ function CowList ({navigation}){
                 tempList.push(tempCow)
             })
             
-            console.log(tempList)
             setCows(tempList)
+            setFilteredCows(tempList)
         }, err => {
             console.log(err.message)
         })
 
+        // If component is closed, this stops the onSnapshot listening for changes. 
         return () => unsubscribe()
     }, [])
+    
+    /*code for searchbar which can check through tag number, weight, sex, DOB and medrecord once a value has been typed into the bar.It uses
+    a variable with all lowercase which is searched in the database in order to yield a result.   https://www.youtube.com/watch?v=b5P6LIjQZEU */
+     
 
+    // Runs once when the component is loaded and then every time there is a change to the "search" variable. 
     useEffect(() => {
         if(search.length > 0) {
             let tempSearch = search.toLowerCase()
             let result = cows.filter(cow => cow.tagNum.includes(tempSearch) || cow.weight == tempSearch || cow.sex.toLowerCase().includes(tempSearch) || cow.dob.includes(tempSearch) || cow.medRecord.toLowerCase().includes(tempSearch))
             setFilteredCows(result)
-        } 
-
+        } else {
+            setFilteredCows(cows)
+        }
     }, [search])
    
+
+ // "item" is a single cow. 
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => navigation.navigate("Cow Details", {tagNum: item.tagNum})}>
             <Card style={styles.item}>
@@ -58,38 +75,33 @@ function CowList ({navigation}){
                 </View>     
             </Card>
         </TouchableOpacity>
- 
     )
 
-    return(
+    return (
         <>
             <ScrollView style={styles.container}>
+
+                { /* https://reactnativeelements.com/docs/searchbar/  */}
                 <SearchBar 
                     containerStyle={{margin: 0}}
                     value={search}
                     onChangeText={setSearch}
-
                 />
 
+                {/*https://reactnative.dev/docs/flatlist */}
                 <FlatList
-                    data={search.length < 1 ? cows : filteredCows}   
+                    data={filteredCows}   
                     renderItem={renderItem}
                     keyExtractor={item => item.tagNum}
                     style={styles.list}
-                />         
-            </ScrollView>
-            <Button title="+" containerStyle={styles.fab}  onPress={() => navigation.navigate("Add Cow")}/>
+                /> 
+            </ScrollView>  
         </>
     )
-}
+}    
+
 
 const styles = StyleSheet.create({
-    fab: {
-        position: "absolute",
-        bottom: 10,
-        right: 10,
-        width: 50
-    },
     container: {
 
     },
@@ -124,5 +136,6 @@ const styles = StyleSheet.create({
         paddingRight: 5
     }
 })
-  
+ 
+//allows me to import this elsewhere if require. can be used as component.
 export default CowList

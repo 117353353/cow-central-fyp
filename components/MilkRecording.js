@@ -1,13 +1,20 @@
+//Import libraries
 import React, { useState } from "react"
 import { StyleSheet, ScrollView, FlatList, TouchableOpacity, View } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
+
+//importing db
 import {db} from "../firebase"
+
 import Icon from 'react-native-vector-icons/Ionicons';
 
+//Creating the variables for the component
 function MilkRecording({navigation}) {
     const [milkRecordings, setMilkRecordings] = useState([])
     const [cowId, setCowId] = useState(0)
 
+
+    //function to retrieve the milk recording documents for that specific cow
     function getRecords() {
         db.collection("milkRecordings").where("cowId", "==", cowId).get()
             .then(docs => {
@@ -21,7 +28,8 @@ function MilkRecording({navigation}) {
                 console.log(error.message)
             })
     }
-
+    //passes in milk recordings to be displayed on a card 
+    // "item" is a single milk recording
     const renderItem = ({ item }) => (
         <TouchableOpacity>
             <Card style={styles.item}>
@@ -49,8 +57,7 @@ function MilkRecording({navigation}) {
     )
 
     return (
-        <>
-        
+        <>   
             <ScrollView style={{flex: 1}}>
                 <Card>
                     <Input
@@ -74,6 +81,8 @@ function MilkRecording({navigation}) {
         </>
     )
 }
+
+//Contains the styling and sizing which has been implemented in this component
 
 const styles = StyleSheet.create({
     fab: {
@@ -116,4 +125,6 @@ const styles = StyleSheet.create({
         paddingRight: 5
     },
 })
+
+//allows it to be used in other components
 export default MilkRecording
