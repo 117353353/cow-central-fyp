@@ -1,9 +1,10 @@
+//import libraries
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { ThemeProvider } from "react-native-elements"
+import { ThemeProvider, Button } from "react-native-elements"
 import StackNavigation from "./components/StackNavigation"
-
+import { LogBox } from "react-native"
 /*This is the colour scheme behind the project with primary being the colour of the buttons
  reference = https://reactnavigation.org/docs/themes/*/
 
@@ -19,10 +20,11 @@ import StackNavigation from "./components/StackNavigation"
 
 
 export default function App() {
+  LogBox.ignoreLogs(['Setting a timer', 'VirtualizedLists'])
+
   return (
     // https://reactnativeelements.com/docs/customization/
     <ThemeProvider theme={theme}>
-      <Button title="Hello" type="outline"/>
       <NavigationContainer>
         <StackNavigation />
       </NavigationContainer>

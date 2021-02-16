@@ -1,5 +1,5 @@
 //importing libraries so they are recognised
-import { useState } from "react"
+import React, { useState} from "react"
 import { StyleSheet,  View } from "react-native" // https://reactnative.dev/
 import { Card, Input, Button } from "react-native-elements" // https://reactnativeelements.com/
 

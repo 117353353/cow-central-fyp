@@ -10,21 +10,23 @@ import CowDetails from "./CowDetails"
 import CreateAccount from "./CreateAccount" 
 import AddMilkRecording from "./AddMilkRecording";
 import AddCow from "./AddCow";
+import AddCalvingData from "./AddCalvingData";
 
 const Stack = createStackNavigator()
 
-/*Stack navigation is required in React native as it tells ths system how to navigate to the different pages contained in the app. 
+/*Stack navigation is required in React native as it tells the system how to navigate to the different pages contained in the app. 
 Reference = https://reactnavigation.org/docs/stack-navigator/ */
 
 function StackNavigation() {
     return(
-        <Stack.Navigator initialRouteName="Signin" screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
             <Stack.Screen name="Main" component={TabNavigation} />
             <Stack.Screen name="Signin" component={Signin} />
             <Stack.Screen name="Add Cow"  options={{headerShown: true}} component={AddCow} />
             <Stack.Screen name="Cow Details" options={{headerShown: true}} component={CowDetails} />
             <Stack.Screen name="CreateAccount" component={CreateAccount} />
             <Stack.Screen name="Add Milk Recording" options={{headerShown: true}} component={AddMilkRecording} />
+            <Stack.Screen name="Add Calving Data" options={{headerShown: true}} component={AddCalvingData} />
         </Stack.Navigator>
     )
 

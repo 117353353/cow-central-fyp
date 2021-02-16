@@ -1,5 +1,5 @@
 ///Import libraries
-import React, { useState, useEffect } from "react"
+import React, {  useState, useEffect } from "react"
 import { View, ScrollView, StyleSheet, FlatList, TouchableOpacity } from "react-native"
 import { Card, Button, Text, SearchBar } from "react-native-elements"
 import { db } from '../firebase'
@@ -95,13 +95,22 @@ function CowList ({navigation}){
                     keyExtractor={item => item.tagNum}
                     style={styles.list}
                 /> 
-            </ScrollView>  
+
+            </ScrollView>
+              
+            <Button title="+" containerStyle={styles.fab} onPress={() => navigation.navigate("Add Cow")} />
         </>
     )
 }    
 
 
 const styles = StyleSheet.create({
+    fab: {
+        position: "absolute",
+        bottom: 10,
+        right: 10,
+        width: 50
+    },
     container: {
 
     },

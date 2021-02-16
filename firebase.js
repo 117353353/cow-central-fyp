@@ -5,6 +5,9 @@ import "firebase/firestore"
 
 
 //Values generated from firestore and connect the database to the project 
+//https://console.firebase.google.com/u/1/project/cow-central/settings/general/web:YjgxZGE1MWUtYTE1OC00ZDU4LTlmNzEtY2I5YmY1MjRlMGY4
+//https://www.freecodecamp.org/news/react-native-firebase-tutorial/
+
 var firebaseConfig = {
     apiKey: "AIzaSyAbfPcTjv0MOgG8BtpNHcSXfups4YiqDrs",
     authDomain: "cow-central.firebaseapp.com",
