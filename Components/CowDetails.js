@@ -11,12 +11,17 @@ import {Picker} from '@react-native-picker/picker';
 
 //importing 
 import AddCow from "./AddCow"
-
+import MyScrollView from "./MyScrollView"
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons'; 
+import { FloatingAction } from "react-native-floating-action"; 
+import Calving from "./Calving"
+import MilkRecording from "./MilkRecording"
 
 // stylesheet determines the styling on the form
 const styles = StyleSheet.create({
     picker: {
-        height: 50, 
+        height: 125, 
         width: "100%",
         margin: "auto",
         marginBottom: 15
@@ -88,14 +93,47 @@ function getCow() {
                 console.log(error.message)
             })
     }
+    
+    const iconSize = 25
+    const iconColor = "white"
 
+    const actions = [
+        {
+          text: "Add Calving",
+          icon: <MaterialCommunityIcons name="baby-bottle-outline" size={iconSize} color={iconColor} />,
+          name: "fabCalving",
+          position: 1
+        },
+        {
+          text: "Add Milk Recording",
+          icon: <Entypo name="bucket" size={iconSize} color={iconColor} />,
+          name: "fabRecording",
+          position: 2
+        },
+        {
+            text: "Refresh",
+            icon: <Entypo name="bucket" size={iconSize} color={iconColor} />,
+            name: "fabRefresh",
+            position: 3
+        },
+    ];
+
+    function handleFabClick(name) {
+        if(name == "fabCalving") {
+            navigation.navigate("Add Calving Data", {tagNum: tagNum})
+        } else if(name == "fabRecording") {
+            navigation.navigate("Add Milk Recording", {tagNum: tagNum})
+        } else if(name == "fabRefresh") {
+            
+        }
+    }
     
     //Scrollview expands to its content, allowing user to scroll down the page. 
     //The card created here allow the user to input the milk recording results.
     //The keyboard type as a form of error handling to limit the type of imput that can be imputed
 
     return (
-        <ScrollView>
+        <MyScrollView>
             <Card>
                 <Input
                     style={styles.textInput}
@@ -135,7 +173,6 @@ function getCow() {
                     <Picker.Item label="Female" value="Female" />
                 </Picker>
                         
-
                 <Input
                     style={styles.textInput}
                     onChangeText={text => setWeight(text)}
@@ -156,7 +193,17 @@ function getCow() {
             <Card style={styles.deleteBtn}>
                 <Button onPress={deleteCow} title="Delete" />
             </Card>
-        </ScrollView>
+
+            <Calving tagNum={tagNum}/> 
+
+            <MilkRecording tagNum={tagNum} />
+
+            <FloatingAction 
+                actions={actions}
+                onPressItem={name => handleFabClick(name) }
+            />
+            {/* https://www.npmjs.com/package/react-native-floating-action */}
+        </MyScrollView>
     )
 }
 

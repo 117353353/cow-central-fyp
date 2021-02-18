@@ -5,8 +5,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import AddCow from "./AddCow"
 import CowList from "./CowList"
-import MilkRecording from "./MilkRecording"
-import Calving from "./Calving"
 import Settings from "./Settings" 
 import Home from "./Home";
 
@@ -38,12 +36,6 @@ function TabNavigation() {
             }} />
             <Tab.Screen name="Cows" component={CowList} options={{
                 tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="cow" size={size} color={color} />)
-            }} />
-            <Tab.Screen name="Milk Recording" component={MilkRecording} options={{
-                tabBarIcon: ({ color, size }) => (<Entypo name="bucket" size={size} color={color} />)
-            }} />
-             <Tab.Screen name="Calving" component={Calving} options={{
-                tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="baby-bottle-outline" size={size} color={color} />)
             }} />
             <Tab.Screen name="Settings" component={Settings} options={{
                 tabBarIcon: ({ color, size }) => (<Feather name="settings" size={size} color={color} />)

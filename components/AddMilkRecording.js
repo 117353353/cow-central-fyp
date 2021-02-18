@@ -1,9 +1,9 @@
 //Importing components from various libraries/packages. 
 import React, { useState } from "react"
-import { StyleSheet, ScrollView } from "react-native"
+import { StyleSheet } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
 import {db} from "../firebase"
-
+import MyScrollView from "./MyScrollView"
 
 
 //use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
@@ -17,7 +17,6 @@ function AddMilkRecording() {
     const [butterfat, setButterfat] = useState(0)
     const [cellCount, setCellCount] = useState(0)
     const [notes, setNotes] = useState("")
-
 
 //This function then creates the necessary fields required in the databse to store the correct information relating to a milk recording
     // 1. Selects "milkRecordings" collection. 
@@ -50,7 +49,7 @@ function AddMilkRecording() {
         The keyboard type as a form of error handling to limit the type of imput that can be imputed
         */
 
-        <ScrollView style={{flex: 1}}>
+        <MyScrollView>
             <Card>   
                 <Input
                     onChangeText={text => setCowId(text)}
@@ -91,7 +90,7 @@ function AddMilkRecording() {
                 <Button title="Add Recording" onPress={addRecord} />
             </Card>
             
-        </ScrollView>
+        </MyScrollView>
     )
 }
 

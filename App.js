@@ -4,7 +4,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider, Button } from "react-native-elements"
 import StackNavigation from "./components/StackNavigation"
-import { LogBox } from "react-native"
+import { LogBox, SafeAreaView } from "react-native"
 /*This is the colour scheme behind the project with primary being the colour of the buttons
  reference = https://reactnavigation.org/docs/themes/*/
 
@@ -24,10 +24,10 @@ export default function App() {
 
   return (
     // https://reactnativeelements.com/docs/customization/
-    <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <StackNavigation />
-      </NavigationContainer>
+    <ThemeProvider theme={theme}>   
+        <NavigationContainer>
+          <StackNavigation />
+        </NavigationContainer>
       <StatusBar style="light" translucent={false}/>
     </ThemeProvider>
   )

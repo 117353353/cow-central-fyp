@@ -1,7 +1,8 @@
 //Import libraries
-import React, { useState } from "react"
-import { StyleSheet, ScrollView, FlatList, TouchableOpacity, View } from "react-native"
+import React, { useState, useEffect } from "react"
+import { StyleSheet, FlatList, TouchableOpacity, View } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
+import MyScrollView from "./MyScrollView"
 
 //importing db
 import {db} from "../firebase"
@@ -9,14 +10,12 @@ import {db} from "../firebase"
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //Creating the variables for the component
-function MilkRecording({navigation}) {
+function MilkRecording({navigation, tagNum}) {
     const [milkRecordings, setMilkRecordings] = useState([])
-    const [cowId, setCowId] = useState(0)
-
 
     //function to retrieve the milk recording documents for that specific cow
     function getRecords() {
-        db.collection("milkRecordings").where("cowId", "==", cowId).get()
+        db.collection("milkRecordings").where("cowId", "==", tagNum).get()
             .then(docs => {
                 if(docs.empty) {
                     setMilkRecordings([])
@@ -33,6 +32,11 @@ function MilkRecording({navigation}) {
                 console.log(error.message)
             })
     }
+
+    useEffect(() => {
+        getRecords()
+    }, [])
+
     //passes in milk recordings to be displayed on a card 
     // "item" is a single milk recording
     const renderItem = ({ item }) => (
@@ -57,33 +61,26 @@ function MilkRecording({navigation}) {
                     </View>    
                 </View>     
             </Card>
-        </TouchableOpacity>
-       
+        </TouchableOpacity>  
     )
 
     return (
-        <>   
-            <ScrollView style={{flex: 1}}>
-                <Card>
-                    <Input
-                        style={styles.textInput}
-                        onChangeText={text => setCowId(text)}
-                        value={cowId}
-                        label="Tag Number"
-                        keyboardType="number-pad"
-                    />  
-                    <Button title="Show" onPress={getRecords} />
-                </Card>
-
+        <Card>
+            <Card.Title>Milk Recording</Card.Title>
+            <Card.Divider />
+            {
+                milkRecordings.length==0
+                ?
+                <Text style={{textAlign: "center"}}>No Data!</Text>
+                :
                 <FlatList
                     data={milkRecordings}
                     renderItem={renderItem}
                     keyExtractor={item => item.id}
                     style={styles.list}
                 />      
-            </ScrollView>
-            <Button title="+" containerStyle={styles.fab} onPress={() => navigation.navigate("Add Milk Recording")} />
-        </>
+            }
+        </Card>
     )
 }
 

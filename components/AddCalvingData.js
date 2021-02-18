@@ -1,16 +1,15 @@
 //Importing components from various libraries/packages. 
 import React, { useState } from "react"
-import { StyleSheet, ScrollView } from "react-native"
+import { StyleSheet } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
 import {db} from "../firebase"
-
+import MyScrollView from "./MyScrollView"
 
 
 //use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
 // They are updated automatically as the user types into the form. 
 
-function AddCalvingData() {
-    const [tagNum, setTagNum] = useState(0)
+function AddCalvingData({route}) {
     const [date, setDate] = useState(0)
     const [notes, setNotes] = useState("")
 
@@ -22,7 +21,7 @@ function AddCalvingData() {
 
     function addRecord() {
         db.collection("calving").doc(/*This is left empty, so Firebase generates a random id for the document*/).set({
-            tagNum: tagNum,
+            tagNum: route.params.tagNum,
             date: date,
             notes: notes
         }).then(() => {
@@ -41,13 +40,13 @@ function AddCalvingData() {
         The keyboard type as a form of error handling to limit the type of imput that can be imputed
         */
 
-        <ScrollView style={{flex: 1}}>
+        <MyScrollView>
             <Card>   
                 <Input
-                    onChangeText={text => setTagNum(text)}
-                    value={tagNum}
+                    value={route.params.tagNum}
                     label="Tag Number"
                     keyboardType="number-pad"
+                    disabled={true}
                 />  
                 <Input
                     onChangeText={text => setDate(text)}
@@ -62,9 +61,8 @@ function AddCalvingData() {
                     multiline={true}
                 />  
                 <Button title="Add Recording" onPress={addRecord} />
-            </Card>
-            
-        </ScrollView>
+            </Card>      
+        </MyScrollView>
     )
 }
 

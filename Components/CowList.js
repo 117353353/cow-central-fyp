@@ -4,7 +4,7 @@ import { View, ScrollView, StyleSheet, FlatList, TouchableOpacity } from "react-
 import { Card, Button, Text, SearchBar } from "react-native-elements"
 import { db } from '../firebase'
 import { AntDesign } from '@expo/vector-icons'; 
-
+import MyScrollView from "./MyScrollView"
 
 //Sets variables for the component
 function CowList ({navigation}){
@@ -79,7 +79,7 @@ function CowList ({navigation}){
 
     return (
         <>
-            <ScrollView style={styles.container}>
+            <MyScrollView>
 
                 { /* https://reactnativeelements.com/docs/searchbar/  */}
                 <SearchBar 
@@ -96,7 +96,7 @@ function CowList ({navigation}){
                     style={styles.list}
                 /> 
 
-            </ScrollView>
+            </MyScrollView>
               
             <Button title="+" containerStyle={styles.fab} onPress={() => navigation.navigate("Add Cow")} />
         </>
@@ -110,9 +110,6 @@ const styles = StyleSheet.create({
         bottom: 10,
         right: 10,
         width: 50
-    },
-    container: {
-
     },
     list: {       
         margin: "auto",

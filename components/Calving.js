@@ -1,7 +1,8 @@
 //Import libraries
-import React, { useState } from "react"
-import { StyleSheet, ScrollView, FlatList, TouchableOpacity, View } from "react-native"
+import React, { useState, useEffect} from "react"
+import { StyleSheet, FlatList, TouchableOpacity, View } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
+import MyScrollView from "./MyScrollView"
 
 //importing db
 import {db} from "../firebase"
@@ -9,9 +10,12 @@ import {db} from "../firebase"
 import Icon from 'react-native-vector-icons/Ionicons';
 
 //Creating the variables for the component
-function Calving({navigation}) {
+function Calving({navigation, tagNum}) {
     const [calvingData, setCalvingData] = useState([])
-    const [tagNum, setTagNum] = useState(0)
+
+    useEffect(() => {
+        getRecords()
+    }, [])
 
     //function to retrieve the milk recording documents for that specific cow
     function getRecords() {
@@ -19,7 +23,6 @@ function Calving({navigation}) {
             .then(docs => {
                 if(docs.empty) {
                     setCalvingData([])
-                    alert("Cow not found!")
                 } else {
                     let temp = []
                     docs.forEach(doc => {
@@ -31,53 +34,48 @@ function Calving({navigation}) {
             .catch(error => {
                 console.log(error.message)
             })
-    }
+    } 
 
     //passes in milk recordings to be displayed on a card 
     // "item" is a single milk recording
     const renderItem = ({ item }) => (
-        <TouchableOpacity>
-            <Card style={styles.item}>
-                <View style={styles.row}>
-                    <View style={styles.column}>
-                        <Text style={styles.text}>Tag Number</Text>
-                        <Text style={styles.text}>Calving Date</Text>    
-                        <Text style={styles.text}>Notes</Text>                         
-                    </View>
-                    <View style={styles.column}>
-                        <Text style={styles.text}>{item.tagNum}</Text>
-                        <Text style={styles.text}>{item.date}</Text>
-                        <Text style={styles.text}>{item.notes}</Text>     
-                    </View>    
-                </View>     
-            </Card>
-        </TouchableOpacity>
-       
+        <TouchableOpacity style={{marginBottom: 10}}>
+            <View style={styles.row}>
+                <View style={styles.column}>
+                    <Text style={styles.text}>Tag Number</Text>
+                    <Text style={styles.text}>Calving Date</Text>    
+                    <Text style={styles.text}>Notes</Text>                         
+                </View>
+                <View style={styles.column}>
+                    <Text style={styles.text}>{item.tagNum}</Text>
+                    <Text style={styles.text}>{item.date}</Text>
+                    <Text style={styles.text}>{item.notes}</Text>     
+                </View>    
+            </View>     
+        </TouchableOpacity>   
     )
 
     return (
         <>   
-            <ScrollView style={{flex: 1}}>
-                <Card>
-                    <Input
-                        style={styles.textInput}
-                        onChangeText={text => setTagNum(text)}
-                        value={tagNum}
-                        label="Tag Number"
-                        keyboardType="number-pad"
-                    />  
-                    <Button title="Show" onPress={getRecords} />
-                </Card>
+            <Card>
+                <Card.Title>Calving Data</Card.Title>
+                <Card.Divider />
 
-                <FlatList
-                    data={calvingData}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                    style={styles.list}
-                />      
-            </ScrollView>
-            <Button title="+" containerStyle={styles.fab} onPress={() => navigation.navigate("Add Calving Data")} />
-        </>
+                {
+                    calvingData.length==0 
+                    ?
+                    <Text style={{textAlign: "center"}}>No Data!</Text>
+                    : 
+                    <FlatList
+                        data={calvingData}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                        style={styles.list}
+                    /> 
+                }
+                  
+            </Card>
+        </>     
     )
 }
 
