@@ -1,7 +1,7 @@
 //importing the relevat items so they can be recognised 
 import React, {useState, useEffect} from "react"
 import {ScrollView, TouchableOpacity, StyleSheet} from "react-native"
-import {Card, Text, Button, Input} from "react-native-elements"
+import {Card, Text, Button, Input, ListItem } from "react-native-elements"
 
 //linking the form to the database 
 import {db} from "../firebase"
@@ -27,10 +27,10 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     deleteBtn: {
-        padding: 0
+        padding: 0,
+        backgroundColor: "red",
     }
 })
-
 
 // Use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
 // They are updated automatically as the user types into the form. 
@@ -43,25 +43,77 @@ function CowDetails({navigation, route}) {
     const [weight, setWeight] = useState("")  
     const [sex, setSex] = useState("")
 
+    const [breedsListVisible, setBreedsListVisible] = useState(false)
+    const [sexListVisible, setSexListVisible] = useState(false)
+
+    const breedsList = [
+        { 
+            title: 'Fresian',
+            onPress: () => { 
+                setBreed("Fresian")  
+                setBreedsListVisible(false)
+            }
+        },
+        { 
+            title: 'Charolais',
+            onPress: () => {
+                setBreed("Charolais") 
+                setBreedsListVisible(false)
+            } 
+        },
+        {
+          title: 'Cancel',
+          containerStyle: { backgroundColor: 'red' },
+          titleStyle: { color: 'white' },
+          onPress: () => setBreedsListVisible(false),
+        },
+    ]
+
+    const sexList = [
+        { 
+            title: 'Male',
+            onPress: () => {
+                setSex("Male")  
+                setSexListVisible(false)
+            }
+        },
+        { 
+            title: 'Female',
+            onPress: () => {
+                setSex("Female") 
+                setSexListVisible(false)
+            } 
+        },
+        {
+          title: 'Cancel',
+          containerStyle: { backgroundColor: 'red' },
+          titleStyle: { color: 'white' },
+          onPress: () => setSexListVisible(false),
+        },
+    ]
+
     // https://reactjs.org/docs/hooks-effect.html
     //useffect stops function being called every time component is refreshed
     useEffect(() => {
         getCow()
     }, [])
     
-//https://firebase.google.com/docs/firestore/query-data/get-data
-// Retrieving a single document from the database using tag num, each cow has a single document which is identiable by their tag number. (The documents name is the cows tag number)
-// Route.params contains the values we sent from CowList e.g navigation.navigate("CowDetails", {tagNum})
-// Updates state variables with value retrieved from database 
-function getCow() {
+    //https://firebase.google.com/docs/firestore/query-data/get-data
+    // Retrieving a single document from the database using tag num, each cow has a single document which is identiable by their tag number. (The documents name is the cows tag number)
+    // Route.params contains the values we sent from CowList e.g navigation.navigate("CowDetails", {tagNum})
+    // Updates state variables with value retrieved from database 
+    function getCow() {
         db.collection("cows").doc(route.params.tagNum).get()
         .then(doc => {
             setTagNum(doc.id)
-            setDob(doc.data().dob)
             setBreed(doc.data().breed)
             setMedRecord(doc.data().medRecord)
             setWeight(doc.data().weight)
             setSex(doc.data().sex)
+
+            let date = doc.data().dob.toDate() // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+            let dobString = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()
+            setDob(dobString)
         }).catch(error => {
             console.log(error.message)
         })
@@ -69,15 +121,13 @@ function getCow() {
 
     //This function updates the database with the variables which ay have changed.
     function update() {
-        db.collection("cows").doc(tagNum).set({
-           breed : breed,
-           dob : dob,
+        db.collection("cows").doc(tagNum).update({
            medRecord : medRecord,
            weight : weight,
            sex : sex,
         }).then(() => {
             // Redirects back to previous page. 
-            navigation.goBack()
+            navigation.goBack() 
             alert("Updated Successfully")
         }).catch(error => {
             alert(error.message)
@@ -110,12 +160,6 @@ function getCow() {
           name: "fabRecording",
           position: 2
         },
-        {
-            text: "Refresh",
-            icon: <Entypo name="bucket" size={iconSize} color={iconColor} />,
-            name: "fabRefresh",
-            position: 3
-        },
     ];
 
     function handleFabClick(name) {
@@ -133,77 +177,73 @@ function getCow() {
     //The keyboard type as a form of error handling to limit the type of imput that can be imputed
 
     return (
-        <MyScrollView>
-            <Card>
-                <Input
-                    style={styles.textInput}
-                    value={tagNum}
-                    label="Tag Number"
-                    disabled={true}
-                />  
+        <>
+            <MyScrollView>
+                <Card>
+                    <Input
+                        style={styles.textInput}
+                        value={tagNum}
+                        label="Tag Number"
+                        disabled={true}
+                    />  
 
-                <Input
-                    style={styles.textInput}
-                    onChangeText={text => setDob(text)}
-                    value ={dob}
-                    label="Date of Birth"
-                />  
+                    <Input
+                        style={styles.textInput}
+                        onChangeText={text => setDob(text)}
+                        value ={dob}
+                        label="Date of Birth"
+                        disabled={true}
+                    />  
 
-                <Picker
-                    selectedValue={breed}
-                    style={styles.picker}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setBreed(itemValue)
-                    }>
-                    <Picker.Item label="Select Breed" value="" />
-                    <Picker.Item label="Fresian" value="Fresian" />
-                    <Picker.Item label="Angus" value="Angus" />
-                    <Picker.Item label="Hereford" value="Hereford" />
-                    <Picker.Item label="Charolais" value="Charolais" />
-                </Picker>
+                    <Input
+                        style={styles.textInput}
+                        value= {breed}
+                        label="Breed"
+                        disabled={true}
+                    />
 
-                <Picker
-                    selectedValue={sex}
-                    style={styles.picker}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setSex(itemValue)
-                    }>
-                    <Picker.Item label="Select Sex" value="" />
-                    <Picker.Item label="Male" value="Male" />
-                    <Picker.Item label="Female" value="Female" />
-                </Picker>
-                        
-                <Input
-                    style={styles.textInput}
-                    onChangeText={text => setWeight(text)}
-                    value= {weight}
-                    label="Weight"
-                />  
+                    <Input
+                        style={styles.textInput}
+                        value={sex}
+                        label="Sex"
+                        disabled={true}
+                    />
+                            
+                    <Input
+                        style={styles.textInput}
+                        onChangeText={text => setWeight(text)}
+                        value= {weight}
+                        label="Weight"
+                        keyboardType="number-pad"
+                    />  
 
-                <Input
-                    style={styles.textInput}
-                    onChangeText={text => setMedRecord(text)}
-                    value={medRecord}
-                    multiline={true}
-                    label="Medical Record"
-                />  
+                    <Input
+                        style={styles.textInput}
+                        onChangeText={text => setMedRecord(text)}
+                        value={medRecord}
+                        multiline={true}
+                        label="Medical Record"
+                    />  
 
-                <Button title="Save" onPress={update} />          
-            </Card>
-            <Card style={styles.deleteBtn}>
-                <Button onPress={deleteCow} title="Delete" />
-            </Card>
+                    <Button title="Update" onPress={update} />          
+                </Card>
 
-            <Calving tagNum={tagNum}/> 
+                <Calving tagNum={tagNum}/> 
 
-            <MilkRecording tagNum={tagNum} />
+                <MilkRecording tagNum={tagNum} />
+
+                <Card style={styles.deleteBtn}>
+                    <Button onPress={deleteCow} title="Delete Cow"/>
+                </Card>
+                
+            </MyScrollView>
 
             <FloatingAction 
                 actions={actions}
                 onPressItem={name => handleFabClick(name) }
             />
             {/* https://www.npmjs.com/package/react-native-floating-action */}
-        </MyScrollView>
+        </>
     )
 }
 

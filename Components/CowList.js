@@ -5,6 +5,9 @@ import { Card, Button, Text, SearchBar } from "react-native-elements"
 import { db } from '../firebase'
 import { AntDesign } from '@expo/vector-icons'; 
 import MyScrollView from "./MyScrollView"
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons'; 
+import { FloatingAction } from "react-native-floating-action"; 
 
 //Sets variables for the component
 function CowList ({navigation}){
@@ -24,6 +27,9 @@ function CowList ({navigation}){
             querySnapshot.forEach(doc => {
                 let tempCow = doc.data()
                 tempCow.tagNum = doc.id
+
+                let date = doc.data().dob.toDate() // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+                tempCow.dobString = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()
                 tempList.push(tempCow)
             })
             
@@ -45,13 +51,30 @@ function CowList ({navigation}){
     useEffect(() => {
         if(search.length > 0) {
             let tempSearch = search.toLowerCase()
-            let result = cows.filter(cow => cow.tagNum.includes(tempSearch) || cow.weight == tempSearch || cow.sex.toLowerCase().includes(tempSearch) || cow.dob.includes(tempSearch) || cow.medRecord.toLowerCase().includes(tempSearch))
+            let result = cows.filter(cow => cow.tagNum.includes(tempSearch) || cow.weight == tempSearch || cow.sex.toLowerCase().includes(tempSearch) || cow.dobString.includes(tempSearch) || cow.medRecord.toLowerCase().includes(tempSearch))
             setFilteredCows(result)
         } else {
             setFilteredCows(cows)
         }
     }, [search])
    
+    const iconSize = 25
+    const iconColor = "white"
+
+    const actions = [
+        {
+          text: "Add Cow",
+          icon: <MaterialCommunityIcons name="cow" size={iconSize} color={iconColor} />,
+          name: "fabAddCow",
+          position: 1
+        },
+    ];
+
+    function handleFabClick(name) {
+        if(name == "fabAddCow") {
+            navigation.navigate("Add Cow")
+        } 
+    }
 
  // "item" is a single cow. 
     const renderItem = ({ item }) => (
@@ -60,17 +83,19 @@ function CowList ({navigation}){
                 <View style={styles.row}>
                     <View style={styles.column}>
                         <Text style={styles.text}>Tag Number</Text>
-                        <Text style={styles.text}>Med Record</Text>
-                        <Text style={styles.text}>DOB</Text>
+                        <Text style={styles.text}>DOB</Text> 
+                        <Text style={styles.text}>Breed</Text>
                         <Text style={styles.text}>Sex</Text>
                         <Text style={styles.text}>Weight</Text>
+                        <Text style={styles.text}>Med Record</Text>
                     </View>
                     <View style={styles.column}>
                         <Text style={styles.text}>{item.tagNum}</Text>
-                        <Text style={styles.text}>{item.medRecord}</Text>
-                        <Text style={styles.text}>{item.dob}</Text>
+                        <Text style={styles.text}>{item.dobString}</Text> 
+                        <Text style={styles.text}>{item.breed}</Text>
                         <Text style={styles.text}>{item.sex}</Text>
                         <Text style={styles.text}>{item.weight} kg</Text>
+                        <Text style={styles.text}>{item.medRecord}</Text>
                     </View>    
                 </View>     
             </Card>
@@ -80,7 +105,6 @@ function CowList ({navigation}){
     return (
         <>
             <MyScrollView>
-
                 { /* https://reactnativeelements.com/docs/searchbar/  */}
                 <SearchBar 
                     containerStyle={{margin: 0}}
@@ -96,9 +120,14 @@ function CowList ({navigation}){
                     style={styles.list}
                 /> 
 
+
             </MyScrollView>
               
-            <Button title="+" containerStyle={styles.fab} onPress={() => navigation.navigate("Add Cow")} />
+            <FloatingAction 
+                actions={actions}
+                onPressItem={name => handleFabClick(name) }
+            />
+            {/* https://www.npmjs.com/package/react-native-floating-action */}
         </>
     )
 }    

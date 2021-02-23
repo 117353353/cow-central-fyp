@@ -1,7 +1,9 @@
 //importing libraries so they are recognised
 import React, { useState} from "react"
-import { StyleSheet,  View } from "react-native" // https://reactnative.dev/
-import { Card, Input, Button } from "react-native-elements" // https://reactnativeelements.com/
+import { StyleSheet,  View, TouchableOpacity } from "react-native" // https://reactnative.dev/
+import { Card, Input, Button, BottomSheet, ListItem, Text } from "react-native-elements" // https://reactnativeelements.com/
+import { FontAwesome } from '@expo/vector-icons'; 
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 //This links the page to the firstore database 
 import { db } from '../firebase'
@@ -25,17 +27,67 @@ const styles = StyleSheet.create({
     }
 })
 
+
+
 //use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
 // They are updated automatically as the user types into the form. 
 function AddCow() {
     // https://reactjs.org/docs/hooks-state.html
-
     const [tagNum, setTagNum] = useState("")
-    const [dob, setDob] = useState("")
+    const [dob, setDob] = useState(new Date())
     const [breed, setBreed] = useState("")
     const [medRecord, setMedRecord] = useState("")
     const [weight, setWeight] = useState("")  
     const [sex, setSex] = useState("")
+
+    const [breedsListVisible, setBreedsListVisible] = useState(false)
+    const [sexListVisible, setSexListVisible] = useState(false)
+
+    const breedsList = [
+        { 
+            title: 'Fresian',
+            onPress: () => { 
+                setBreed("Fresian")  
+                setBreedsListVisible(false)
+            }
+        },
+        { 
+            title: 'Charolais',
+            onPress: () => {
+                setBreed("Charolais") 
+                setBreedsListVisible(false)
+            } 
+        },
+        {
+          title: 'Cancel',
+          containerStyle: { backgroundColor: 'red' },
+          titleStyle: { color: 'white' },
+          onPress: () => setBreedsListVisible(false),
+        },
+    ]
+
+    const sexList = [
+        { 
+            title: 'Male',
+            onPress: () => {
+                setSex("Male")  
+                setSexListVisible(false)
+            }
+        },
+        { 
+            title: 'Female',
+            onPress: () => {
+                setSex("Female") 
+                setSexListVisible(false)
+            } 
+        },
+        {
+          title: 'Cancel',
+          containerStyle: { backgroundColor: 'red' },
+          titleStyle: { color: 'white' },
+          onPress: () => setSexListVisible(false),
+        },
+    ]
 
     //This function uses tag number as the id for the documents created in the database and creates the rows required to store the data
     function add() {
@@ -68,45 +120,34 @@ function AddCow() {
                 onChangeText={text => setTagNum(text)}
                 value={tagNum}
                 label="Tag Number"
-            />  
-               
-            <Input
-                style={styles.textInput}
-                onChangeText={text => setDob(text)}
-                value ={dob}
-                label="Date of Birth"
+                keyboardType="number-pad"
             />  
 
-            <Picker
-                selectedValue={breed}
-                style={styles.picker}
-                onValueChange={itemValue =>
-                    setBreed(itemValue)
-                }>
-                <Picker.Item label="Select Breed" value="" />
-                <Picker.Item label="Fresian" value="Fresian" />
-                <Picker.Item label="Angus" value="Angus" />
-                <Picker.Item label="Hereford" value="Hereford" />
-                <Picker.Item label="Charolais" value="Charolais" />
-            </Picker>
+            <TouchableOpacity onPress={() => setBreedsListVisible(true)}>
+                <Input 
+                    label="Breed"
+                    value={breed}
+                    rightIcon={<FontAwesome name="chevron-down" size={24} color="grey" />}
+                    disabled
+                />
+            </TouchableOpacity>
 
-            <Picker
-                selectedValue={sex}
-                style={styles.picker}
-                onValueChange={itemValue =>
-                     setSex(itemValue)
-                }>
-                <Picker.Item label="Select Sex" value="" />
-                <Picker.Item label="Male" value="Male" />
-                <Picker.Item label="Female" value="Male" />
-            </Picker>
+            <TouchableOpacity onPress={() => setSexListVisible(true)}>
+                <Input 
+                    label="Sex"
+                    value={sex}
+                    rightIcon={<FontAwesome name="chevron-down" size={24} color="grey" />}
+                    disabled
+                    disabledInputStyle={{color: "black"}}
+                />
+            </TouchableOpacity>
                     
-
             <Input
                 style={styles.textInput}
                 onChangeText={text => setWeight(text)}
                 value= {weight}
                 label="Weight"
+                
             />  
 
              <Input
@@ -117,7 +158,36 @@ function AddCow() {
                 label="Medical Record"
             />  
     
+            <Text style={{marginLeft: 10}}>Date of Birth</Text>
+            <DateTimePicker
+                value={dob}
+                mode={"date"}
+                display="default"
+                onChange={(event, date) => setDob(date)}
+                style={{marginBottom: 20}}
+            />
+
             <Button title="Add Cow" onPress={add} />          
+
+            <BottomSheet isVisible={breedsListVisible}>
+                {breedsList.map((l, i) => (
+                    <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
+                        <ListItem.Content>
+                            <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+                        </ListItem.Content>
+                    </ListItem>
+                ))}
+            </BottomSheet> 
+
+            <BottomSheet isVisible={sexListVisible}>
+                {sexList.map((l, i) => (
+                    <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress}>
+                        <ListItem.Content>
+                            <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
+                        </ListItem.Content>
+                    </ListItem>
+                ))}
+            </BottomSheet>
         </Card>
     )
 }

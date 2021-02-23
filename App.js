@@ -9,15 +9,14 @@ import { LogBox, SafeAreaView } from "react-native"
  reference = https://reactnavigation.org/docs/themes/*/
 
  const theme = {
-  colors: {
-    primary: "#8a91a5",
-    secondary: "orange"
-  },
-  button: {
-    type: "outline",
-  },
-};
-
+    colors: {
+      primary: "#2b96d9",
+      secondary: "orange"
+    },
+    button: {
+      
+    },
+  };
 
 export default function App() {
   LogBox.ignoreLogs(['Setting a timer', 'VirtualizedLists'])

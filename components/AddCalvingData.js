@@ -4,13 +4,14 @@ import { StyleSheet } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
 import {db} from "../firebase"
 import MyScrollView from "./MyScrollView"
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 
 //use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
 // They are updated automatically as the user types into the form. 
 
 function AddCalvingData({route}) {
-    const [date, setDate] = useState(0)
+    const [date, setDate] = useState(new Date())
     const [notes, setNotes] = useState("")
 
 //This function then creates the necessary fields required in the databse to store the correct information relating to a milk recording
@@ -25,7 +26,7 @@ function AddCalvingData({route}) {
             date: date,
             notes: notes
         }).then(() => {
-            alert("SUCCESS!")
+            navigation.goBack()
         }).catch(error => {
             alert(error.mesage)
         })
@@ -48,18 +49,22 @@ function AddCalvingData({route}) {
                     keyboardType="number-pad"
                     disabled={true}
                 />  
-                <Input
-                    onChangeText={text => setDate(text)}
-                    value={date}
-                    label="CalvingDate"
-                    keyboardType="number-pad"
-                />
+
                 <Input
                     onChangeText={text => setNotes(text)}
                     value={notes}
                     label="Notes"
                     multiline={true}
                 />  
+
+                <DateTimePicker
+                    value={date}
+                    mode={"date"}
+                    display="default"
+                    onChange={(event, date) => setDate(date)}
+                    style={{marginBottom: 20}}
+                />
+
                 <Button title="Add Recording" onPress={addRecord} />
             </Card>      
         </MyScrollView>

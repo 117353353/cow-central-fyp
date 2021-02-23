@@ -1,5 +1,5 @@
 import React from "react"
-import {ScrollView, SafeAreaView} from "react-native"
+import {ScrollView, SafeAreaView, KeyboardAvoidingView} from "react-native"
 
 function MyScrollView({children}) {
     return (

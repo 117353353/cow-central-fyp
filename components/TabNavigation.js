@@ -30,7 +30,7 @@ function TabNavigation() {
     const color = "black";
 
     return(
-        <Tab.Navigator initialRouteName="Home">
+        <Tab.Navigator initialRouteName="Cows">
             <Tab.Screen name="Home" component={Home} options={{
                 tabBarIcon: ({ color, size }) => (<FontAwesome name="home" size={size} color={color} />)
             }} />

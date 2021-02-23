@@ -3,6 +3,8 @@ import React, { useState, useEffect} from "react"
 import { StyleSheet, FlatList, TouchableOpacity, View } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
 import MyScrollView from "./MyScrollView"
+import { FontAwesome } from '@expo/vector-icons'; 
+
 
 //importing db
 import {db} from "../firebase"
@@ -13,9 +15,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 function Calving({navigation, tagNum}) {
     const [calvingData, setCalvingData] = useState([])
 
-    useEffect(() => {
+/*     useEffect(() => {
         getRecords()
-    }, [])
+    }, [])  */
 
     //function to retrieve the milk recording documents for that specific cow
     function getRecords() {
@@ -24,11 +26,14 @@ function Calving({navigation, tagNum}) {
                 if(docs.empty) {
                     setCalvingData([])
                 } else {
-                    let temp = []
+                    let tempList = []
                     docs.forEach(doc => {
-                       temp.push(doc.data())
+                        let temp = doc.data()
+                        let date = doc.data().date.toDate() // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+                        temp.dateString = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()
+                        tempList.push(temp)
                     })
-                    setCalvingData(temp)
+                    setCalvingData(tempList)
                 }
             })
             .catch(error => {
@@ -40,31 +45,31 @@ function Calving({navigation, tagNum}) {
     // "item" is a single milk recording
     const renderItem = ({ item }) => (
         <TouchableOpacity style={{marginBottom: 10}}>
-            <View style={styles.row}>
-                <View style={styles.column}>
-                    <Text style={styles.text}>Tag Number</Text>
-                    <Text style={styles.text}>Calving Date</Text>    
-                    <Text style={styles.text}>Notes</Text>                         
-                </View>
-                <View style={styles.column}>
-                    <Text style={styles.text}>{item.tagNum}</Text>
-                    <Text style={styles.text}>{item.date}</Text>
-                    <Text style={styles.text}>{item.notes}</Text>     
-                </View>    
-            </View>     
+            <Card>
+                <View style={styles.row}>
+                    <View style={styles.column}>
+                        <Text style={styles.text}>Calving Date</Text>    
+                        <Text style={styles.text}>Notes</Text>                         
+                    </View>
+                    <View style={styles.column}>
+                        <Text style={styles.text}>{item.dateString}</Text>
+                        <Text style={styles.text}>{item.notes}</Text>     
+                    </View>    
+                </View>     
+            </Card>   
         </TouchableOpacity>   
     )
 
     return (
         <>   
-            <Card>
-                <Card.Title>Calving Data</Card.Title>
+            <Card>      
+                <Card.Title>Calving Data <FontAwesome name="refresh" size={24} color="black" onPress={getRecords}/></Card.Title>
                 <Card.Divider />
 
                 {
                     calvingData.length==0 
                     ?
-                    <Text style={{textAlign: "center"}}>No Data!</Text>
+                        <Text style={{textAlign: "center"}}>No data!</Text>
                     : 
                     <FlatList
                         data={calvingData}

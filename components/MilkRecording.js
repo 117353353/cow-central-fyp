@@ -3,9 +3,10 @@ import React, { useState, useEffect } from "react"
 import { StyleSheet, FlatList, TouchableOpacity, View } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
 import MyScrollView from "./MyScrollView"
+import { FontAwesome } from '@expo/vector-icons'; 
 
 //importing db
-import {db} from "../firebase"
+import { db } from "../firebase"
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -15,17 +16,19 @@ function MilkRecording({navigation, tagNum}) {
 
     //function to retrieve the milk recording documents for that specific cow
     function getRecords() {
-        db.collection("milkRecordings").where("cowId", "==", tagNum).get()
+        db.collection("milkRecordings").where("tagNum", "==", tagNum).get()
             .then(docs => {
                 if(docs.empty) {
                     setMilkRecordings([])
-                    alert("Cow not found!")
                 } else {
-                    let temp = []
+                    let tempList = []
                     docs.forEach(doc => {
-                       temp.push(doc.data())
+                        let temp = doc.data()
+                        let date = doc.data().date.toDate() // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+                        temp.dateString = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()
+                        tempList.push(temp)
                     })
-                    setMilkRecordings(temp)
+                    setMilkRecordings(tempList)
                 }
             })
             .catch(error => {
@@ -44,7 +47,7 @@ function MilkRecording({navigation, tagNum}) {
             <Card style={styles.item}>
                 <View style={styles.row}>
                     <View style={styles.column}>
-                        <Text style={styles.text}>Date</Text>
+                        <Text style={styles.text}>Date</Text> 
                         <Text style={styles.text}>Milk Volume</Text>
                         <Text style={styles.text}>Protein</Text>
                         <Text style={styles.text}>Butterfat</Text>
@@ -52,7 +55,7 @@ function MilkRecording({navigation, tagNum}) {
                         <Text style={styles.text}>Notes</Text>
                     </View>
                     <View style={styles.column}>
-                        <Text style={styles.text}>{item.date}</Text>
+                        <Text style={styles.text}>{item.dateString}</Text> 
                         <Text style={styles.text}>{item.milkProduced}</Text>
                         <Text style={styles.text}>{item.protein}</Text>
                         <Text style={styles.text}>{item.butterfat}</Text>
@@ -66,17 +69,18 @@ function MilkRecording({navigation, tagNum}) {
 
     return (
         <Card>
-            <Card.Title>Milk Recording</Card.Title>
+            <Card.Title>Milk Recordings <FontAwesome name="refresh" size={24} color="black" onPress={getRecords}/></Card.Title>
+
             <Card.Divider />
             {
-                milkRecordings.length==0
+                milkRecordings.length==0 
                 ?
                 <Text style={{textAlign: "center"}}>No Data!</Text>
-                :
+                : 
                 <FlatList
                     data={milkRecordings}
                     renderItem={renderItem}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item, index) => { return item.id }}
                     style={styles.list}
                 />      
             }
