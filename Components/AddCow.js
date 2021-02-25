@@ -58,6 +58,69 @@ function AddCow() {
                 setBreedsListVisible(false)
             } 
         },
+        { 
+            title: 'Angus',
+            onPress: () => {
+                setBreed("Angus") 
+                setBreedsListVisible(false)
+            } 
+        },
+        { 
+            title: 'Jersey',
+            onPress: () => {
+                setBreed("Jersey") 
+                setBreedsListVisible(false)
+            } 
+        },
+        { 
+            title: 'Hereford',
+            onPress: () => {
+                setBreed("Hereford") 
+                setBreedsListVisible(false)
+            } 
+        },
+        { 
+            title: 'Limousin',
+            onPress: () => {
+                setBreed("Limousin") 
+                setBreedsListVisible(false)
+            } 
+        },
+        { 
+            title: 'Aubrac',
+            onPress: () => {
+                setBreed("Aubrac") 
+                setBreedsListVisible(false)
+            } 
+        },
+        { 
+            title: 'Saler',
+            onPress: () => {
+                setBreed("Saler") 
+                setBreedsListVisible(false)
+            } 
+        },
+        { 
+            title: 'Shorthorn',
+            onPress: () => {
+                setBreed("Shorthorn") 
+                setBreedsListVisible(false)
+            } 
+        },
+        { 
+            title: 'Simmental',
+            onPress: () => {
+                setBreed("Simmental") 
+                setBreedsListVisible(false)
+            } 
+        },
+        { 
+            title: 'Parthenais',
+            onPress: () => {
+                setBreed("Parthenais") 
+                setBreedsListVisible(false)
+            } 
+        },
         {
           title: 'Cancel',
           containerStyle: { backgroundColor: 'red' },
