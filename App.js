@@ -16,6 +16,23 @@ import { LogBox, SafeAreaView } from "react-native"
     button: {
       
     },
+    Card: {
+      containerStyle: {
+        backgroundColor: "#e6f3ff",
+        borderRadius: 15
+      },
+    },
+    Input: {
+      labelStyle: {
+        color: "#1c1c1c"
+      },
+      inputStyle: {
+        color: "#1c1c1c"
+      },
+      disabledInputStyle: {
+        color: "#1c1c1c"
+      }
+    }
   };
 
 export default function App() {

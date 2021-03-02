@@ -1,6 +1,6 @@
 //importing the relevat items so they can be recognised 
 import React, {useState, useEffect} from "react"
-import {ScrollView, TouchableOpacity, StyleSheet} from "react-native"
+import {ScrollView, TouchableOpacity, StyleSheet, TouchableNativeFeedback, Alert} from "react-native"
 import {Card, Text, Button, Input, ListItem } from "react-native-elements"
 
 //linking the form to the database 
@@ -91,6 +91,21 @@ function CowDetails({navigation, route}) {
           onPress: () => setSexListVisible(false),
         },
     ]
+
+    const deleteWarning = () =>
+        Alert.alert(
+        "Delete Cow " + tagNum,
+        "Are you sure?",
+        [
+            {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+            },
+            { text: "Delete", onPress: () => deleteCow() }
+        ],
+        { cancelable: false }
+    )
 
     // https://reactjs.org/docs/hooks-effect.html
     //useffect stops function being called every time component is refreshed
@@ -232,10 +247,11 @@ function CowDetails({navigation, route}) {
 
                 <MilkRecording tagNum={tagNum} />
 
-                <Card style={styles.deleteBtn}>
-                    <Button onPress={deleteCow} title="Delete Cow"/>
-                </Card>
-                
+                <TouchableNativeFeedback onPress={deleteWarning}>
+                    <Card style={styles.deleteBtn} backgroundColor="red">
+                        <Text style={{textAlign: "center", fontSize: 23, color: "white"}}>Delete Cow</Text>  
+                    </Card>
+                </TouchableNativeFeedback>
             </MyScrollView>
 
             <FloatingAction 

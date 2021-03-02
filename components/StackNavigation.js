@@ -11,6 +11,7 @@ import CreateAccount from "./CreateAccount"
 import AddMilkRecording from "./AddMilkRecording";
 import AddCow from "./AddCow";
 import AddCalvingData from "./AddCalvingData";
+import CalvingCalendar from "./CalvingCalendar";
 
 const Stack = createStackNavigator()
 
@@ -27,6 +28,7 @@ function StackNavigation() {
             <Stack.Screen name="CreateAccount" component={CreateAccount} />
             <Stack.Screen name="Add Milk Recording" options={{headerShown: true}} component={AddMilkRecording} />
             <Stack.Screen name="Add Calving Data" options={{headerShown: true}} component={AddCalvingData} />
+            <Stack.Screen name="Calving Calendar" options={{headerShown: true}} component={CalvingCalendar} />
         </Stack.Navigator>
     )
 

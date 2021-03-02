@@ -4,14 +4,13 @@ import { Text, Card, Button } from "react-native-elements"
 import {db} from "../firebase"
 import MyScrollView from "./MyScrollView"
 
-function Home() {
+function Home({navigation}) {
     const [herdSize, setHerdSize] = useState(0)
     const [avgWeight, setAvgWeight] = useState(0)
     const [avgProtein, setAvgProtein] = useState(0)
     const [avgButterfat, setAvgButterfat] = useState(0)
     const [startDate, setStartDate] = useState(new Date() - 31556952000)
     const [endDate, setEndDate] = useState(new Date())
-
 
     useEffect(() => {
         getCows()
@@ -64,6 +63,7 @@ function Home() {
                 <Text style={{textAlign: "center"}}>The average butterfat recorded is {avgButterfat}g</Text>
             </Card>
             <Button title={"Refresh"} onPress={getCows} style={{marginTop: 25, width: "80%", marginLeft: "auto", marginRight: "auto"}} />
+            <Button title="Calving Calendar" onPress={() => navigation.navigate("Calving Calendar")} />
         </MyScrollView>
     )
 }

@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "cow-central",
-    "slug": "cow-central",
-    "version": "1.0.0",
+    "name": "Cow-Central",
+    "slug": "Cow-Central",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -20,10 +20,13 @@
       "supportsTablet": true
     },
     "android": {
+      "permissions": [],
+      "versionCode": 2, 
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.brianhally.CowCentral"
     },
     "web": {
       "favicon": "./assets/favicon.png"
