@@ -1,73 +1,47 @@
-//Importing components from various libraries/packages. 
 import React, { useState } from "react"
-import { StyleSheet } from "react-native"
-import { Card, Input, Text, Button } from "react-native-elements"
-import {db} from "../firebase"
-import MyScrollView from "./MyScrollView"
-import DateTimePicker from '@react-native-community/datetimepicker'
+import { Card, Input, Button } from "react-native-elements"
+import MyScrollView from "components/MyScrollView"
+import { addCalving } from "api/firestore.js"
+import DatePicker from "components/DatePicker"
 
-
-//use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
-// They are updated automatically as the user types into the form. 
-
-function AddCalvingData({route}) {
+function AddCalvingData({route, navigation}) {
     const [date, setDate] = useState(new Date())
+    const [dob, setDob] = useState(new Date())
     const [notes, setNotes] = useState("")
 
-//This function then creates the necessary fields required in the databse to store the correct information relating to a milk recording
-    // 1. Selects "calving" collection. 
-    // 2. Creates a new document with a randomy generated ID. 
-    // 3. Adds field cowId with value of cowId variable from above. Same for rest. 
-    // 4. .then if succesful | .catch if failed. 
-
     function addRecord() {
-        db.collection("calving").doc(/*This is left empty, so Firebase generates a random id for the document*/).set({
-            tagNum: route.params.tagNum,
-            date: date,
-            notes: notes
-        }).then(() => {
-            navigation.goBack()
-        }).catch(error => {
-            alert(error.mesage)
-        })
+        addCalving(route.params.tagNum, date, notes)
+            .then(() => {
+                navigation.goBack()
+            }).catch(error => {
+                alert(error.message)
+            })
     }
 
     return (
-        /* 
-        Scrollview expands to its content, allowing user to scroll down the page. 
-            
-        The card created here allow the user to input the milk recording results.
+        <>
+            <MyScrollView>
+                <Card>   
+                    <Input
+                        value={route.params.tagNum}
+                        label="Tag Number"
+                        keyboardType="number-pad"
+                        disabled={true}
+                    />  
 
-        The keyboard type as a form of error handling to limit the type of imput that can be imputed
-        */
+                    <Input
+                        onChangeText={text => setNotes(text)}
+                        value={notes}
+                        label="Notes"
+                        multiline={true}
+                    />  
 
-        <MyScrollView>
-            <Card>   
-                <Input
-                    value={route.params.tagNum}
-                    label="Tag Number"
-                    keyboardType="number-pad"
-                    disabled={true}
-                />  
+                    <DatePicker date={date} setDate={setDate} label="Date of Birth"/>
 
-                <Input
-                    onChangeText={text => setNotes(text)}
-                    value={notes}
-                    label="Notes"
-                    multiline={true}
-                />  
-
-                <DateTimePicker
-                    value={date}
-                    mode={"date"}
-                    display="default"
-                    onChange={(event, date) => setDate(date)}
-                    style={{marginBottom: 20}}
-                />
-
-                <Button title="Add Recording" onPress={addRecord} />
-            </Card>      
-        </MyScrollView>
+                    <Button title="Add Recording" onPress={addRecord} />
+                </Card>      
+            </MyScrollView>
+        </>
     )
 }
 

@@ -17,6 +17,7 @@ import { Entypo } from '@expo/vector-icons';
 import { FloatingAction } from "react-native-floating-action"; 
 import Calving from "./Calving"
 import MilkRecording from "./MilkRecording"
+import { archiveCow } from "api/firestore"
 
 // stylesheet determines the styling on the form
 const styles = StyleSheet.create({
@@ -102,7 +103,12 @@ function CowDetails({navigation, route}) {
             onPress: () => console.log("Cancel Pressed"),
             style: "cancel"
             },
-            { text: "Delete", onPress: () => deleteCow() }
+            { text: "Archive", onPress: () => {
+                archiveCow(tagNum) 
+                navigation.navigate("Cows")
+
+            }
+            }
         ],
         { cancelable: false }
     )
@@ -141,8 +147,6 @@ function CowDetails({navigation, route}) {
            weight : weight,
            sex : sex,
         }).then(() => {
-            // Redirects back to previous page. 
-            navigation.goBack() 
             alert("Updated Successfully")
         }).catch(error => {
             alert(error.message)
@@ -249,7 +253,7 @@ function CowDetails({navigation, route}) {
 
                 <TouchableNativeFeedback onPress={deleteWarning}>
                     <Card style={styles.deleteBtn} backgroundColor="red">
-                        <Text style={{textAlign: "center", fontSize: 23, color: "white"}}>Delete Cow</Text>  
+                        <Text style={{textAlign: "center", fontSize: 23, color: "white"}}>Archive Cow</Text>  
                     </Card>
                 </TouchableNativeFeedback>
             </MyScrollView>

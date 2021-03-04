@@ -8,8 +8,8 @@ import {auth} from "../firebase"
 
 //Creating the variables
 function Signin({navigation}){
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("test7@gmail.com")
+    const [password, setPassword] = useState("password")
 
 //https://firebase.google.com/docs/auth/web/password-auth
 //uses authorization framework from firstore
@@ -41,7 +41,7 @@ function Signin({navigation}){
             
             <Button title="SignIn" onPress={signIn}/>    
 
-            <Text onPress={() => navigation.navigate("CreateAccount")}>Create Account</Text>
+            <Text style={{textAlign: "center", marginTop: 20}} onPress={() => navigation.navigate("CreateAccount")}>Create Account</Text>
         </Card>
     )   
     }

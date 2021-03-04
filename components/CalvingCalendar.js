@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react"
-import { StyleSheet, FlatList, View } from "react-native"
+import { StyleSheet, FlatList, View, Alert } from "react-native"
 import {Text, Card, Button} from "react-native-elements"
-import { getCalving } from "../api/firestore"
 import { FontAwesome } from '@expo/vector-icons'; 
+import { FloatingAction } from "react-native-floating-action"; 
+import { getCalving, archiveCalving, unArchiveCalving } from "api/firestore"
+import {formatDate} from "../helpers"
 
-
-function CalvingCalendar() {
+function CalvingCalendar({route}) {
     const [calvingData, setCalvingData] = useState([])
 
     useEffect(() => {
@@ -13,13 +14,40 @@ function CalvingCalendar() {
     }, [])
 
     function getData() {
-        getCalving()
-            .then(data => {
-                setCalvingData(data)
-            }).catch(error => {
-                alert(error.message)
-            })
+        if(route.params.archived == true) {
+            getCalving(true)
+                .then(data => {
+                    setCalvingData(data)
+                }).catch(error => {
+                    alert(error.message)
+                })
+        } else {
+            getCalving(false)
+                .then(data => {
+                    setCalvingData(data)
+                }).catch(error => {
+                    alert(error.message)
+                })
+        }
     }
+
+
+    function handleArchive(id) {
+        Alert.alert(
+            "",
+            "Are you sure you want to archive this?",
+            [
+                {
+                text: "Cancel",
+                onPress: () => {},
+                style: "cancel"
+                },
+                { text: "Archive", onPress: () => archiveCalving(id) }
+            ],
+            { cancelable: false }
+        ) 
+    }
+
 
     const renderItem = ({ item }) => (
         <Card>
@@ -28,29 +56,65 @@ function CalvingCalendar() {
                     <Text>Tag Number</Text>
                     <Text>Calving Date</Text> 
                     <Text>Notes</Text>
+                    {route.params.archived ? <Text>Date Archived</Text> : null}
                 </View>
                 <View style={styles.column}>
                     <Text>{item.tagNum}</Text>
                     <Text>{item.dateString}</Text> 
                     <Text>{item.notes}</Text>
-                </View> 
-                <View style={styles.buttonColumn}>
-                    <Button icon={<FontAwesome name="calendar-plus-o" size={24} color="white"/>}/>
-                </View>  
-                <View style={styles.buttonColumn}>
-                    <Button icon={<FontAwesome name="archive" size={24} color="white" />}/>
+                    {route.params.archived ? <Text>{formatDate(item.archivedDate.toDate())}</Text> : null}
                 </View>
-            </View>     
+                {
+                    route.params.archived
+                    ? 
+                    null 
+                    :
+                    <View>
+                        <View style={styles.buttonColumn}>
+                            <Button 
+                                onPress={() => {}}
+                                icon={<FontAwesome name="calendar-plus-o" size={24} color="white"/>}
+                            />
+                        </View>
+                        <View style={styles.buttonColumn}>
+                            <Button 
+                                onPress={() => handleArchive(item.id)}
+                                icon={<FontAwesome name="archive" size={24} color="white"/>}
+                            />             
+                        </View>  
+                    </View>
+                }
+            </View>
         </Card>
     )
 
+    const actions = [
+        {
+          text: "Refresh",
+          icon: <FontAwesome name="refresh" size={24} color="white" />,
+          name: "fabRefresh",
+          position: 1
+        },
+    ];
+
+    function handleFabClick(name) {
+        if(name == "fabRefresh") {
+            getData()
+        } 
+    }
+
     return (
         <>
+            {calvingData.length == 0 && <Text style={{textAlign: "center", fontSize: 20, marginTop: 10}}>No data!</Text>}
             <FlatList
                 data={calvingData}   
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
             /> 
+            <FloatingAction 
+                actions={actions}
+                onPressItem={name => handleFabClick(name) }
+            />
         </>
     )
 }

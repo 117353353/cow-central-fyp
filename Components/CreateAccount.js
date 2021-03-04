@@ -40,7 +40,7 @@ function CreateAccount({navigation}){
             />  
             
             <Button title="Create Account" onPress={signUp}/>    
-            <Text onPress={() => navigation.navigate("Signin")}>Existing account?</Text>
+            <Text style={{textAlign: "center", marginTop: 20}} onPress={() => navigation.navigate("Signin")}>Existing Account?</Text>
         </Card>
     )   
 }

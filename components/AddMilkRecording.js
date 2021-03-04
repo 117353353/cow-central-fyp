@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import { StyleSheet } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
 import {db} from "../firebase"
-import MyScrollView from "./MyScrollView"
+import MyScrollView from "components/MyScrollView"
 import DateTimePicker from '@react-native-community/datetimepicker'
 
 

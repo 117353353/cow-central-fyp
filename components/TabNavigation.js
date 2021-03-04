@@ -8,16 +8,10 @@ import CowList from "./CowList"
 import Settings from "./Settings" 
 import Home from "./Home";
 
-
 // Icons  The icons displayed for each tab were got from = https://icons.expo.fyi/   */ 
-
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons'; 
 import { Feather } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';  
 import { FontAwesome } from '@expo/vector-icons'; 
-
-
 
 const Tab = createBottomTabNavigator();
 

@@ -1,9 +1,8 @@
 //Import libraries
-import React, { useState, useEffect} from "react"
+import React, { useState } from "react"
 import { StyleSheet, FlatList, TouchableOpacity, View } from "react-native"
-import { Card, Input, Text, Button } from "react-native-elements"
-import MyScrollView from "./MyScrollView"
-import { FontAwesome } from '@expo/vector-icons'; 
+import { Card, Text } from "react-native-elements"
+import { FontAwesome } from '@expo/vector-icons'
 
 
 //importing db

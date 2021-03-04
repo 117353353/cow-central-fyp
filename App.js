@@ -36,8 +36,9 @@ import { LogBox, SafeAreaView } from "react-native"
   };
 
 export default function App() {
-  LogBox.ignoreLogs(['Setting a timer', 'VirtualizedLists'])
+  LogBox.ignoreLogs(['Setting a timer', 'VirtualizedLists', 'RNDatePickerAndroid.dismiss'])
 
+  alert(new Date())
   return (
     // https://reactnativeelements.com/docs/customization/
     <ThemeProvider theme={theme}>   

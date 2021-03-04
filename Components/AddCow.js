@@ -1,20 +1,12 @@
-//importing libraries so they are recognised
 import React, { useState} from "react"
-import { StyleSheet,  View, TouchableOpacity } from "react-native" // https://reactnative.dev/
+import { StyleSheet, TouchableOpacity } from "react-native" // https://reactnative.dev/
 import { Card, Input, Button, BottomSheet, ListItem, Text } from "react-native-elements" // https://reactnativeelements.com/
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
-
-//This links the page to the firstore database 
-import { db } from '../firebase'
-
-//importing for animal sex and animal breed components
-// https://github.com/react-native-picker/picker
-import {Picker} from '@react-native-picker/picker';
-
+import { addCow } from "api/firestore"
+import DatePicker from "components/DatePicker"
 
 //This details the styling and correct sizing required for this page. reference= https://reactnative.dev/docs/stylesheet
-
 const styles = StyleSheet.create({
     picker: {
         height: 50, 
@@ -26,8 +18,6 @@ const styles = StyleSheet.create({
        
     }
 })
-
-
 
 //use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
 // They are updated automatically as the user types into the form. 
@@ -154,18 +144,12 @@ function AddCow() {
 
     //This function uses tag number as the id for the documents created in the database and creates the rows required to store the data
     function add() {
-        // https://firebase.google.com/docs/firestore/manage-data/add-data
-        db.collection("cows").doc(tagNum).set({
-           breed : breed,
-           dob : dob,
-           medRecord : medRecord,
-           weight : weight,
-           sex :sex,
-        }).then(() => {
-            alert("Success")
-        }).catch(error => {
-            alert(error.message)
-        })
+        addCow(tagNum, breed, medRecord, weight, sex)
+            .then(() => {
+                alert("Success")
+            }).catch(error => {
+                alert(error.message)
+            })
     }
 
     /* These cards are created containing a textimput or datapicker to select the correct information for the cow profile. The card keep
@@ -209,8 +193,7 @@ function AddCow() {
                 style={styles.textInput}
                 onChangeText={text => setWeight(text)}
                 value= {weight}
-                label="Weight"
-                
+                label="Weight"        
             />  
 
              <Input
@@ -221,14 +204,7 @@ function AddCow() {
                 label="Medical Record"
             />  
     
-            <Text style={{marginLeft: 10}}>Date of Birth</Text>
-            <DateTimePicker
-                value={dob}
-                mode={"date"}
-                display="default"
-                onChange={(event, date) => setDob(date)}
-                style={{marginBottom: 20}}
-            />
+            <DatePicker date={dob} setDate={setDob} label="Date of Birth"/>
 
             <Button title="Add Cow" onPress={add} />          
 

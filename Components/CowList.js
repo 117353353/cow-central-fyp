@@ -3,11 +3,11 @@ import React, {  useState, useEffect } from "react"
 import { View, ScrollView, StyleSheet, FlatList, TouchableOpacity } from "react-native"
 import { Card, Button, Text, SearchBar } from "react-native-elements"
 import { db } from '../firebase'
-import { AntDesign } from '@expo/vector-icons'; 
 import MyScrollView from "./MyScrollView"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons'; 
 import { FloatingAction } from "react-native-floating-action"; 
+import {formatDate} from "../helpers"
+import { getCows } from "api/firestore"
 
 //Sets variables for the component
 function CowList ({navigation}){
@@ -21,27 +21,17 @@ function CowList ({navigation}){
         this code will run again, instantly updating the list of cows.
     */ 
     useEffect(() => {
-        // https://firebase.google.com/docs/firestore/query-data/listen#node.js_4
-        const unsubscribe = db.collection('cows').onSnapshot(querySnapshot => {
-            let tempList = []
-            querySnapshot.forEach(doc => {
-                let tempCow = doc.data()
-                tempCow.tagNum = doc.id
-
-                let date = doc.data().dob.toDate() // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
-                tempCow.dobString = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()
-                tempList.push(tempCow)
-            })
-            
-            setCows(tempList)
-            setFilteredCows(tempList)
-        }, err => {
-            console.log(err.message)
-        })
-
-        // If component is closed, this stops the onSnapshot listening for changes. 
-        return () => unsubscribe()
+        loadData()
     }, [])
+
+    function loadData() {
+        getCows(false)
+            .then(cows => {
+                setCows(cows)
+            }).catch(error => {
+                alert(error.message)
+            })
+    }
     
     /*code for searchbar which can check through tag number, weight, sex, DOB and medrecord once a value has been typed into the bar.It uses
     a variable with all lowercase which is searched in the database in order to yield a result.   https://www.youtube.com/watch?v=b5P6LIjQZEU */
@@ -51,7 +41,7 @@ function CowList ({navigation}){
     useEffect(() => {
         if(search.length > 0) {
             let tempSearch = search.toLowerCase()
-            let result = cows.filter(cow => cow.tagNum.includes(tempSearch) || cow.weight == tempSearch || cow.sex.toLowerCase().includes(tempSearch) || cow.dobString.includes(tempSearch) || cow.medRecord.toLowerCase().includes(tempSearch))
+            let result = cows.filter(cow => cow.tagNum.includes(tempSearch) || cow.breed.toLowerCase().includes(tempSearch) || cow.weight == tempSearch || cow.sex.toLowerCase().includes(tempSearch) || cow.dobString.includes(tempSearch) || cow.medRecord.toLowerCase().includes(tempSearch))
             setFilteredCows(result)
         } else {
             setFilteredCows(cows)
@@ -68,12 +58,20 @@ function CowList ({navigation}){
           name: "fabAddCow",
           position: 1
         },
+        {
+            text: "Refresh",
+            icon: <MaterialCommunityIcons name="cow" size={iconSize} color={iconColor} />,
+            name: "fabRefresh",
+            position: 2
+        },
     ];
 
     function handleFabClick(name) {
         if(name == "fabAddCow") {
             navigation.navigate("Add Cow")
-        } 
+        } else if(name == "fabRefresh") {
+            loadData()
+        }
     }
 
  // "item" is a single cow. 
