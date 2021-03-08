@@ -18,6 +18,7 @@ export async function getCows() {
     docs.forEach(doc => {
         let cow = doc.data()
         cow.tagNum = doc.id
+        cow.dob = cow.dob.toDate()
         cows.push(cow)
     })
 
@@ -74,13 +75,15 @@ export async function addCalving(tagNum, date, notes) {
 }
 
 export async function getCalving(tagNum) {
-    let docs = []
+    let docs
 
     if(tagNum) {
         docs = await db.collection("calving").orderBy('date').where("tagNum", "==", tagNum).get()
     } else {
         docs = await db.collection("calving").orderBy('date').where("archived", "==", false).get()
     }
+    
+    if(docs.empty) return []
 
     let calvingData = []
     docs.forEach(doc => {

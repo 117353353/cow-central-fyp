@@ -3,8 +3,8 @@ import React, { useState } from "react"
 import { Card, Input, Text, Button } from "react-native-elements"
 import { db } from "src/firebase"
 import MyScrollView from "components/MyScrollView"
-import DateTimePicker from '@react-native-community/datetimepicker'
 
+import DatePicker from "components/DatePicker"
 
 //use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
 // They are updated automatically as the user types into the form. 
@@ -27,10 +27,10 @@ function AddMilkRecording({navigation, route}) {
         db.collection("milkRecordings").doc(/*This is left empty, so Firebase generates a random id for the document*/).set({
             tagNum: route.params.tagNum,
             date: date,
-            milkProduced: milkProduced,
-            protein: protein,
-            butterfat: butterfat,
-            cellCount: cellCount,
+            milkProduced: parseFloat(milkProduced),
+            protein: parseFloat(protein),
+            butterfat: parseFloat(butterfat),
+            cellCount: parseFloat(cellCount),
             notes: notes
         }).then(() => {
             navigation.goBack()
@@ -86,13 +86,15 @@ function AddMilkRecording({navigation, route}) {
                     multiline={true}
                 />  
 
-                <DateTimePicker
+                <DatePicker date={date} setDate={setDate} label="Date"/>
+
+{/*                 <DateTimePicker
                     value={date}
                     mode={"date"}
                     display="default"
                     onChange={(event, date) => setDate(date)}
                     style={{marginBottom: 20}}
-                />
+                /> */}
                 <Button title="Add Recording" onPress={addRecord} />
             </Card>
         </MyScrollView>

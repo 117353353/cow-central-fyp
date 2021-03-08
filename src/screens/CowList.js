@@ -36,7 +36,7 @@ function CowList ({navigation}){
     useEffect(() => {
         if(search.length > 0) {
             let tempSearch = search.toLowerCase()
-            let result = cows.filter(cow => cow.tagNum.includes(tempSearch) || cow.breed.toLowerCase().includes(tempSearch) || cow.weight == tempSearch || cow.sex.toLowerCase().includes(tempSearch) || cow.dobString.includes(tempSearch) || cow.medRecord.toLowerCase().includes(tempSearch))
+            let result = cows.filter(cow => cow.tagNum.includes(tempSearch) || cow.breed.toLowerCase().includes(tempSearch) || cow.weight == tempSearch || cow.sex.toLowerCase().includes(tempSearch) || formatDate(cow.dob).includes(tempSearch) || cow.medRecord.toLowerCase().includes(tempSearch))
             setFilteredCows(result)
         } else {
             setFilteredCows(cows)
@@ -73,7 +73,7 @@ function CowList ({navigation}){
                     </View>
                     <View style={styles.column}>
                         <Text style={styles.text}>{item.tagNum}</Text>
-                        <Text style={styles.text}>{formatDate(item.dob.toDate())}</Text> 
+                         <Text style={styles.text}>{formatDate(item.dob)}</Text>  
                         <Text style={styles.text}>{item.breed}</Text>
                         <Text style={styles.text}>{item.sex}</Text>
                         <Text style={styles.text}>{item.weight} kg</Text>
@@ -86,7 +86,7 @@ function CowList ({navigation}){
 
     return (
         <>
-            <MyScrollView onRefresh={loadData}>
+            <MyScrollView onRefresh={loadData}>    
                 <Card containerStyle={{padding: 0}}>
                     <SearchBar 
                         containerStyle={{margin: 0}}
@@ -99,7 +99,7 @@ function CowList ({navigation}){
                         lightTheme
                     />
                 </Card>
-                    
+                {cows.length==0 && <Card><Text style={{textAlign: "center"}}>No Cows Found!</Text></Card>}  
                 <FlatList
                     data={filteredCows}   
                     renderItem={renderItem}

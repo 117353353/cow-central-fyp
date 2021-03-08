@@ -25,15 +25,15 @@ function CalvingCalendar({route, tagNum}) {
 
     function handleArchive(id) {
         Alert.alert(
-            "",
-            "Are you sure you want to archive this?",
+            "Has this cow calved?",
+            "(This action is not reversible)",
             [
                 {
-                text: "Cancel",
+                text: "No",
                 onPress: () => {},
                 style: "cancel"
                 },
-                { text: "Archive", onPress: () => {
+                { text: "Yes", onPress: () => {
                     archiveCalving(id) 
                     loadData()
                 }}
@@ -50,13 +50,11 @@ function CalvingCalendar({route, tagNum}) {
                     <Text style={styles.label}>Tag Number</Text>
                     <Text style={styles.label}>Calving Date</Text> 
                     <Text style={styles.label}>Notes</Text>
-                    {route.params.archived ? <Text>Date Archived</Text> : null}
                 </View>
                 <View style={styles.column}>
                     <Text>{item.tagNum}</Text>
-                    <Text>{item.dateString}</Text> 
+                    <Text>{formatDate(item.date)}</Text> 
                     <Text>{item.notes}</Text>
-                    {route.params.archived ? <Text>{formatDate(item.archivedDate.toDate())}</Text> : null}
                 </View>
                 <View style={styles.buttonColumn}>
                     <Button 
@@ -78,7 +76,7 @@ function CalvingCalendar({route, tagNum}) {
 
     return (
         <MyScrollView onRefresh={loadData}>
-            {calvingData.length == 0 && <Text style={{textAlign: "center", fontSize: 20, marginTop: 10}}>No data!</Text>}
+            {calvingData.length==0 && <Card><Text style={{textAlign: "center"}}>No calving scheduled!</Text></Card>}  
             <FlatList
                 data={calvingData}   
                 renderItem={renderItem}

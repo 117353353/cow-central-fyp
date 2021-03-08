@@ -34,7 +34,7 @@ const theme = {
     }
   };
 
-export default function App() {
+export default function Main() {
   LogBox.ignoreLogs(['Setting a timer', 'VirtualizedLists', 'RNDatePickerAndroid.dismiss'])
 
   return (

@@ -25,7 +25,8 @@ function Home({navigation}) {
                     totalWeight += parseInt(cow.weight, 10)
                 })
 
-                setAvgWeight(totalWeight/herdSize) 
+
+                setAvgWeight((parseInt(totalWeight/herdSize)))
             }).catch(error => {
                 alert(error.message)
             })
