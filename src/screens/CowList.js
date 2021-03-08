@@ -1,42 +1,37 @@
-///Import libraries
-import React, {  useState, useEffect } from "react"
-import { View, ScrollView, StyleSheet, FlatList, TouchableOpacity } from "react-native"
-import { Card, Button, Text, SearchBar } from "react-native-elements"
-import { db } from '../firebase'
-import MyScrollView from "./MyScrollView"
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FloatingAction } from "react-native-floating-action"; 
-import {formatDate} from "../helpers"
-import { getCows } from "api/firestore"
+import React, { useState, useEffect, useContext } from "react"
+import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native"
+import { ThemeContext, Card, Text, SearchBar } from "react-native-elements"
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { FloatingAction } from "react-native-floating-action"
 
-//Sets variables for the component
+import { getCows } from "src/firestore"
+import MyScrollView from "src/components/MyScrollView"
+import { formatDate } from "src/helpers"
+
 function CowList ({navigation}){
     const [cows, setCows] = useState([])  
     const [filteredCows, setFilteredCows] = useState([]) 
     const [search, setSearch] = useState("")
 
-    /* 
-        Useffect prevents function from being called multiple times
-         On snapshot listens for changes in the cows collection. If any document in cows is updated/deleted/added, 
-        this code will run again, instantly updating the list of cows.
-    */ 
+    const { theme } = useContext(ThemeContext)
+
     useEffect(() => {
         loadData()
     }, [])
 
     function loadData() {
-        getCows(false)
+        setSearch("")
+        getCows()
             .then(cows => {
                 setCows(cows)
+                setFilteredCows(cows)
             }).catch(error => {
                 alert(error.message)
             })
     }
     
     /*code for searchbar which can check through tag number, weight, sex, DOB and medrecord once a value has been typed into the bar.It uses
-    a variable with all lowercase which is searched in the database in order to yield a result.   https://www.youtube.com/watch?v=b5P6LIjQZEU */
-     
-
+    a variable with all lowercase which is searched in the database in order to yield a result.   https://www.youtube.com/watch?v=b5P6LIjQZEU */   
     // Runs once when the component is loaded and then every time there is a change to the "search" variable. 
     useEffect(() => {
         if(search.length > 0) {
@@ -48,30 +43,19 @@ function CowList ({navigation}){
         }
     }, [search])
    
-    const iconSize = 25
-    const iconColor = "white"
-
     const actions = [
         {
           text: "Add Cow",
-          icon: <MaterialCommunityIcons name="cow" size={iconSize} color={iconColor} />,
+          icon: <MaterialCommunityIcons name="cow" size={25} color={"white"} />,
           name: "fabAddCow",
           position: 1
-        },
-        {
-            text: "Refresh",
-            icon: <MaterialCommunityIcons name="cow" size={iconSize} color={iconColor} />,
-            name: "fabRefresh",
-            position: 2
         },
     ];
 
     function handleFabClick(name) {
         if(name == "fabAddCow") {
             navigation.navigate("Add Cow")
-        } else if(name == "fabRefresh") {
-            loadData()
-        }
+        } 
     }
 
  // "item" is a single cow. 
@@ -80,16 +64,16 @@ function CowList ({navigation}){
             <Card style={styles.item}>
                 <View style={styles.row}>
                     <View style={styles.column}>
-                        <Text style={styles.text}>Tag Number</Text>
-                        <Text style={styles.text}>DOB</Text> 
-                        <Text style={styles.text}>Breed</Text>
-                        <Text style={styles.text}>Sex</Text>
-                        <Text style={styles.text}>Weight</Text>
-                        <Text style={styles.text}>Med Record</Text>
+                        <Text style={styles.bold}>Tag Number</Text>
+                        <Text style={styles.bold}>DOB</Text> 
+                        <Text style={styles.bold}>Breed</Text>
+                        <Text style={styles.bold}>Sex</Text>
+                        <Text style={styles.bold}>Weight</Text>
+                        <Text style={styles.bold}>Med Record</Text>
                     </View>
                     <View style={styles.column}>
                         <Text style={styles.text}>{item.tagNum}</Text>
-                        <Text style={styles.text}>{item.dobString}</Text> 
+                        <Text style={styles.text}>{formatDate(item.dob.toDate())}</Text> 
                         <Text style={styles.text}>{item.breed}</Text>
                         <Text style={styles.text}>{item.sex}</Text>
                         <Text style={styles.text}>{item.weight} kg</Text>
@@ -102,34 +86,36 @@ function CowList ({navigation}){
 
     return (
         <>
-            <MyScrollView>
-                { /* https://reactnativeelements.com/docs/searchbar/  */}
-                <SearchBar 
-                    containerStyle={{margin: 0}}
-                    value={search}
-                    onChangeText={setSearch}
-                />
-
-                {/*https://reactnative.dev/docs/flatlist */}
+            <MyScrollView onRefresh={loadData}>
+                <Card containerStyle={{padding: 0}}>
+                    <SearchBar 
+                        containerStyle={{margin: 0}}
+                        value={search}
+                        onChangeText={setSearch}
+                        round
+                        containerStyle={{backgroundColor: "#ffffffff"}}
+                        inputContainerStyle={{backgroundColor: "#ffffffff"}}
+                        inputStyle={{color: "#1c1c1c"}}
+                        lightTheme
+                    />
+                </Card>
+                    
                 <FlatList
                     data={filteredCows}   
                     renderItem={renderItem}
                     keyExtractor={item => item.tagNum}
                     style={styles.list}
                 /> 
-
-
             </MyScrollView>
               
             <FloatingAction 
                 actions={actions}
                 onPressItem={name => handleFabClick(name) }
+                style={{backgroundColor: "red"}}
             />
-            {/* https://www.npmjs.com/package/react-native-floating-action */}
         </>
     )
 }    
-
 
 const styles = StyleSheet.create({
     fab: {
@@ -143,11 +129,13 @@ const styles = StyleSheet.create({
     },
     item: {
         display: "flex",
-
     },
     text: {
-        fontSize: 20
+        
     },
+    bold: {
+        fontWeight: "bold"
+    }, 
     row: {
         display: "flex",
         flexDirection: "row",

@@ -1,43 +1,27 @@
-//Import libraries
 import React, { useState, useEffect } from "react"
 import { StyleSheet, FlatList, TouchableOpacity, View } from "react-native"
-import { Card, Input, Text, Button } from "react-native-elements"
-import MyScrollView from "./MyScrollView"
-import { FontAwesome } from '@expo/vector-icons'; 
+import { Card, Text } from "react-native-elements"
+import { FontAwesome } from '@expo/vector-icons'
 
-//importing db
-import { db } from "../firebase"
-
-import Icon from 'react-native-vector-icons/Ionicons';
+import { getMilkRecordings } from "src/firestore"
+import { formatDate } from "src/helpers"
 
 //Creating the variables for the component
 function MilkRecording({navigation, tagNum}) {
     const [milkRecordings, setMilkRecordings] = useState([])
 
     //function to retrieve the milk recording documents for that specific cow
-    function getRecords() {
-        db.collection("milkRecordings").where("tagNum", "==", tagNum).get()
-            .then(docs => {
-                if(docs.empty) {
-                    setMilkRecordings([])
-                } else {
-                    let tempList = []
-                    docs.forEach(doc => {
-                        let temp = doc.data()
-                        let date = doc.data().date.toDate() // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
-                        temp.dateString = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()
-                        tempList.push(temp)
-                    })
-                    setMilkRecordings(tempList)
-                }
-            })
-            .catch(error => {
-                console.log(error.message)
+    function loadData() {
+        getMilkRecordings()
+            .then(result => {
+                setMilkRecordings(result)
+            }).catch(error => {
+                alert(error.message)
             })
     }
 
     useEffect(() => {
-        getRecords()
+        loadData()
     }, [])
 
     //passes in milk recordings to be displayed on a card 
@@ -55,7 +39,7 @@ function MilkRecording({navigation, tagNum}) {
                         <Text style={styles.text}>Notes</Text>
                     </View>
                     <View style={styles.column}>
-                        <Text style={styles.text}>{item.dateString}</Text> 
+                        <Text style={styles.text}>{formatDate(item.date)}</Text> 
                         <Text style={styles.text}>{item.milkProduced}</Text>
                         <Text style={styles.text}>{item.protein}</Text>
                         <Text style={styles.text}>{item.butterfat}</Text>

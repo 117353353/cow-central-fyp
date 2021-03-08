@@ -1,12 +1,12 @@
 //Import libraries
 import React from "react"
-import { AntDesign } from '@expo/vector-icons'; 
-import { auth } from "../firebase"
-import { Card, ListItem, Avatar, Text} from "react-native-elements"
-import MyScrollView from "./MyScrollView"
+import { StyleSheet } from "react-native"
+import { AntDesign } from '@expo/vector-icons' 
+import { Card, ListItem, Avatar } from "react-native-elements"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons'; 
+
+import { auth } from "src/firebase"
+import MyScrollView from "src/components/MyScrollView"
 
 function Settings({navigation}) {
     function signOut() {
@@ -22,20 +22,20 @@ function Settings({navigation}) {
     return (
         <MyScrollView>
             <Card containerStyle={{padding: 0}} style={{padding: 0}}>
-                <ListItem onPress={() => navigation.navigate("Cow Archive")}>
-                    <Avatar><MaterialCommunityIcons name="cow" size={iconSize} color={iconColor}/></Avatar>
+                <ListItem style={styles.listItem} onPress={() => navigation.navigate("Cow Archive")}>
+                    <MaterialCommunityIcons name="cow" style={styles.icon}/>
                     <ListItem.Content>
                         <ListItem.Title>Cow Archive</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
-                <ListItem onPress={() => navigation.navigate("Calving Calendar", {archived: true})} bottomDivider>
-                    <Avatar><MaterialCommunityIcons name="baby-bottle-outline" size={iconSize} color={iconColor} /></Avatar>
+                <ListItem style={styles.listItem} onPress={() => navigation.navigate("Calving Archive", {archived: true})} bottomDivider>
+                    <MaterialCommunityIcons name="baby-bottle-outline" style={styles.icon}/>
                     <ListItem.Content>
                         <ListItem.Title>Calving Archive</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
-                <ListItem onPress={signOut}>
-                    <Avatar><AntDesign name="logout" size={iconSize} color={iconColor}/></Avatar>
+                <ListItem style={styles.listItem} onPress={signOut}>
+                    <AntDesign name="logout" style={styles.icon}/>
                     <ListItem.Content>
                         <ListItem.Title>Sign Out</ListItem.Title>
                     </ListItem.Content>
@@ -44,5 +44,18 @@ function Settings({navigation}) {
         </MyScrollView>    
     )
 }
+
+const styles = StyleSheet.create({
+    listItem: {
+
+    },  
+    icon: {
+        marginRight: 10,
+        fontSize: 30,
+        color: "black",
+        padding: 5
+    }
+})
+
 
 export default Settings

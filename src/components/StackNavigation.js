@@ -4,15 +4,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 //Importing the components
 
-import TabNavigation from "./TabNavigation";
-import Signin from "./Signin"
-import CowDetails from "./CowDetails"
-import CreateAccount from "./CreateAccount" 
-import AddMilkRecording from "./AddMilkRecording";
-import AddCow from "./AddCow";
-import AddCalvingData from "./AddCalvingData";
-import CalvingCalendar from "./CalvingCalendar";
-import CowArchive from "components/CowArchive"
+import TabNavigation from "components/TabNavigation";
+import Signin from "screens/Signin"
+import CowDetails from "screens/CowDetails"
+import CreateAccount from "screens/CreateAccount" 
+import AddMilkRecording from "screens/AddMilkRecording";
+import AddCow from "screens/AddCow";
+import AddCalvingData from "screens/AddCalvingData";
+import CalvingCalendar from "screens/CalvingCalendar";
+import CowArchive from "screens/CowArchive"
+import CalvingArchive from "screens/CalvingArchive"
 
 const Stack = createStackNavigator()
 
@@ -31,6 +32,7 @@ function StackNavigation() {
             <Stack.Screen name="Add Calving Data" options={{headerShown: true}} component={AddCalvingData} />
             <Stack.Screen name="Calving Calendar" options={{headerShown: true}} component={CalvingCalendar} />
             <Stack.Screen name="Cow Archive" options={{headerShown: true}} component={CowArchive} />
+            <Stack.Screen name="Calving Archive" options={{headerShown: true}} component={CalvingArchive} />
         </Stack.Navigator>
     )
 

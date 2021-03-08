@@ -2,7 +2,8 @@ import React, { useState} from "react"
 import { TouchableOpacity } from "react-native"
 import { Input } from "react-native-elements"
 import DateTimePicker from '@react-native-community/datetimepicker'
-import {formatDate } from "../helpers"
+import { formatDate } from "src/helpers"
+
 // https://github.com/react-native-datetimepicker/datetimepicker
 function DatePicker({date, setDate, label}) {
     const [show, setShow] = useState(false)
@@ -16,7 +17,7 @@ function DatePicker({date, setDate, label}) {
     return (
         <>
             <TouchableOpacity onPress={() => setShow(true)}>
-                <Input label={label ? label : "Date"} value={formatDate(date)} disabled/>
+                <Input disabledInputStyle={{opacity: 1}} label={label ? label : "Date"} value={formatDate(date)} disabled/>
             </TouchableOpacity>
 
             {show &&
