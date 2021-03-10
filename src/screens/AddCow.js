@@ -21,7 +21,7 @@ function AddCow() {
 
     const navigation = useNavigation();
 
-    const breedList = ["Fresian", "Charolais", "Angus", "Jersey", "Hereford", "Limousin", "Aubrac", "Saler", "Shorthorn", "Simmental", "Phartenais"]
+    const breedList = ["Fresian", "Charolais", "Angus", "Jersey", "Hereford", "Limousin", "Aubrac", "Saler", "Shorthorn", "Simmental", "Parthenais"]
     const sexList = ["Male", "Female"]
 
     //This function uses tag number as the id for the documents created in the database and creates the rows required to store the data

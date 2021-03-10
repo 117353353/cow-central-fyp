@@ -25,7 +25,7 @@ function Calving({navigation, tagNum}) {
                 setCalvingData(calving)
             })
             .catch(error => {
-                console.log(error.message)
+                alert(error.message)
             })
     } 
 

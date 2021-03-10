@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { StyleSheet, FlatList, View, Alert } from "react-native"
 import { Text, Card, Button} from "react-native-elements"
 import { FontAwesome } from '@expo/vector-icons' 
+import * as Calendar from 'expo-calendar'
 
 import { getCalving, archiveCalving } from "src/firestore"
 import { formatDate } from "src/helpers"
@@ -58,7 +59,7 @@ function CalvingCalendar({route, tagNum}) {
                 </View>
                 <View style={styles.buttonColumn}>
                     <Button 
-                        onPress={() => {}}
+                        onPress={() => createCalendar()}
                         icon={<FontAwesome name="calendar-plus-o" size={24} color="white"/>}
                         buttonStyle={{marginRight: 5, height: 50}}
                     />

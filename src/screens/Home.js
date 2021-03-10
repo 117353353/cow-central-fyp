@@ -9,6 +9,8 @@ function Home({navigation}) {
     const [herdSize, setHerdSize] = useState(0)
     const [avgWeight, setAvgWeight] = useState(0)
     const [avgProtein, setAvgProtein] = useState(0)
+    const [avgMilkProduced, setAvgMilkProduced] = useState(0)
+    const [avgCellCount, setAvgCellCount] = useState(0)
     const [avgButterfat, setAvgButterfat] = useState(0)
 
     useEffect(() => {
@@ -31,19 +33,26 @@ function Home({navigation}) {
                 alert(error.message)
             })
 
-        getMilkRecordings().then(records => {
-            let numRecords = records.length
-            let totalProtein = 0
-            let totalButterfat = 0
+        getMilkRecordings()
+            .then(records => {
+                let numRecords = records.length
+                let totalProtein = 0
+                let totalButterfat = 0
+                let totalMilkProduced = 0
+                let totalCellCount = 0
 
-            records.forEach(record => {
-                totalProtein += record.protein
-                totalButterfat += record.butterfat
+                records.forEach(record => {
+                    totalProtein += record.protein
+                    totalButterfat += record.butterfat
+                    totalMilkProduced += record.milkProduced
+                    totalCellCount += record.cellCount
+                })
+
+                setAvgProtein((totalProtein/numRecords).toPrecision(2))
+                setAvgButterfat((totalButterfat/numRecords).toPrecision(2))
+                setAvgMilkProduced((totalMilkProduced/numRecords).toPrecision(2))
+                setAvgCellCount((totalCellCount/numRecords).toPrecision(2))
             })
-
-            setAvgProtein((totalProtein/numRecords).toPrecision(2))
-            setAvgButterfat((totalButterfat/numRecords).toPrecision(2))
-        })
     }
 
     return (
@@ -53,8 +62,10 @@ function Home({navigation}) {
                     <Card.Title>Herd Statistics</Card.Title>
                     <Text style={styles.text}>There are <Text style={styles.bold}>{herdSize}</Text> animals in your herd.</Text>
                     <Text style={styles.text}>There average weight of your herd is <Text style={styles.bold}>{avgWeight}</Text>kg.</Text>
+                    <Text style={styles.text}>The average volume of milk produced is <Text style={styles.bold}>{avgMilkProduced}</Text>L</Text>
                     <Text style={styles.text}>The average protein recorded is <Text style={styles.bold}>{avgProtein}</Text>g</Text>
                     <Text style={styles.text}>The average butterfat recorded is <Text style={styles.bold}>{avgButterfat}</Text>g</Text>
+                    <Text style={styles.text}>The average cellcount recorded is <Text style={styles.bold}>{avgCellCount}.</Text></Text>
                 </Card>
                 <Card containerStyle={{padding: 0}}>
                     <Button title="Calving Calendar" onPress={() => navigation.navigate("Calving Calendar", {archived: false})} />

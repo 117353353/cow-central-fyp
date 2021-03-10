@@ -238,43 +238,49 @@ function CowDetails({navigation, route}) {
                     <Button title="Update" onPress={update} />          
                 </Card>
 
-                <Card>
-                    <Card.Title style={{color: theme.colors.primary, fontSize: 18}} onPress={loadData}>
-                        Calving
-                    </Card.Title>
-                    <Divider />
-                    {
-                        calvingData.length==0 
-                        ?
-                            <Card.Title style={{marginTop: 15, marginBottom: 5}}>No data!</Card.Title>
-                        : 
-                        <FlatList
-                            data={calvingData}
-                            renderItem={calvingItem}
-                            keyExtractor={item => item.id}
-                            style={styles.list}
-                        /> 
-                    }
-                </Card>
+                {
+                    sex == "Female" && 
+                    <>
+                        <Card>
+                            <Card.Title style={{color: theme.colors.primary, fontSize: 18}} onPress={loadData}>
+                                Calving
+                            </Card.Title>
+                            <Divider />
+                            {
+                                calvingData.length==0 
+                                ?
+                                    <Card.Title style={{marginTop: 15, marginBottom: 5}}>No data!</Card.Title>
+                                : 
+                                <FlatList
+                                    data={calvingData}
+                                    renderItem={calvingItem}
+                                    keyExtractor={item => item.id}
+                                    style={styles.list}
+                                /> 
+                            }
+                        </Card>
+                        <Card>
+                            <Card.Title style={{color: theme.colors.primary, fontSize: 18}} onPress={loadData}>
+                                Milk Recording
+                            </Card.Title>
+                            <Divider />
+                            {
+                                milkingData.length==0 
+                                ?
+                                    <Card.Title style={{marginTop: 15, marginBottom: 5}}>No data!</Card.Title>
+                                : 
+                                <FlatList
+                                    data={milkingData}
+                                    renderItem={milkingItem}
+                                    keyExtractor={item => item.id}
+                                    style={styles.list}
+                                /> 
+                            }
+                        </Card>
+                    </>
 
-                <Card>
-                    <Card.Title style={{color: theme.colors.primary, fontSize: 18}} onPress={loadData}>
-                        Milk Recording
-                    </Card.Title>
-                    <Divider />
-                    {
-                        milkingData.length==0 
-                        ?
-                            <Card.Title style={{marginTop: 15, marginBottom: 5}}>No data!</Card.Title>
-                        : 
-                        <FlatList
-                            data={milkingData}
-                            renderItem={milkingItem}
-                            keyExtractor={item => item.id}
-                            style={styles.list}
-                        /> 
-                    }
-                </Card>
+                }
+                
 
                 <TouchableNativeFeedback onPress={deleteWarning}>
                     <Card style={styles.deleteBtn} backgroundColor="red">
@@ -283,10 +289,14 @@ function CowDetails({navigation, route}) {
                 </TouchableNativeFeedback>
             </MyScrollView>
 
-            <FloatingAction 
-                actions={actions}
-                onPressItem={name => handleFabClick(name) }
-            />
+            { 
+                sex == "Female" && 
+                <FloatingAction 
+                    actions={actions}
+                    onPressItem={name => handleFabClick(name) }
+                />
+            }
+
             {/* https://www.npmjs.com/package/react-native-floating-action */}
         </>
     )

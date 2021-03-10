@@ -18,6 +18,7 @@ const theme = {
     },
     Card: {
       containerStyle: {
+      backgroundColor:"#e6f2ff"
         
       },
     },
