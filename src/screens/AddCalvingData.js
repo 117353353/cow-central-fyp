@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { ToastAndroid } from "react-native"
 import { Card, Input, Button } from "react-native-elements"
 
 import MyScrollView from "components/MyScrollView"
@@ -14,6 +15,7 @@ function AddCalvingData({route, navigation}) {
         addCalving(tagNum, date, notes)
             .then(() => {
                 navigation.goBack()
+                ToastAndroid.show('Added successfully', ToastAndroid.SHORT)
             }).catch(error => {
                 alert(error.message)
             })

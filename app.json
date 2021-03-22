@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "brian",
-    "slug": "Cow-Central",
-    "version": "1.0.1",
+    "name": "Cow Central",
+    "slug": "Cow Central",
+    "version": "1.3",
     "orientation": "portrait",
     "icon": "src/assets/icon.png",
     "splash": {
-      "image": "src/assets/splash.png",
+      "image": "src/assets/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,15 +21,15 @@
     },
     "android": {
       "permissions": [],
-      "versionCode": 2,
+      "versionCode": 5,
       "adaptiveIcon": {
-        "foregroundImage": "src/assets/adaptive-icon.png",
+        "foregroundImage": "src/assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.brianhally.CowCentral"
     },
     "web": {
-      "favicon": "src/assets/favicon.png"
+      "favicon": "src/assets/icon.png"
     },
     "description": ""
   }

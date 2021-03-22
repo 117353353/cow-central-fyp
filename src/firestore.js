@@ -1,8 +1,8 @@
-import { db } from "./firebase"
+import { db, auth } from "./firebase"
 import { formatDate } from "./helpers"
 
 export async function getCow(tagNum) {
-    let doc = await db.collection("cows").doc(tagNum).get().catch(error => alert(error.message))
+    let doc = await db.collection(auth.currentUser.uid).doc("herd").collection("cows").doc(tagNum).get().catch(error => alert(error.message))
     let cow = doc.data()
     cow.id = doc.id
     cow.dobString = formatDate(cow.dob.toDate())
@@ -10,7 +10,7 @@ export async function getCow(tagNum) {
 }
 
 export async function getCows() {
-    let docs = await db.collection("cows").where("archived", "==", false).get() 
+    let docs = await db.collection(auth.currentUser.uid).doc("herd").collection("cows").where("archived", "==", false).get() 
 
     if(docs.empty) return []
     
@@ -26,7 +26,7 @@ export async function getCows() {
 }
 
 export async function getArchivedCows() {
-    let docs = await db.collection("cows").where("archived", "==", true).get() 
+    let docs = await db.collection(auth.currentUser.uid).doc("herd").collection("cows").where("archived", "==", true).get() 
 
     if(docs.empty) return []
     
@@ -41,7 +41,7 @@ export async function getArchivedCows() {
 }
 
 export async function addCow(tagNum, breed, dob, medRecord, weight, sex) {
-    await db.collection("cows").doc(tagNum).set({
+    await db.collection(auth.currentUser.uid).doc("herd").collection("cows").doc(tagNum).set({
         breed: breed,
         dob: dob,
         medRecord: medRecord,
@@ -52,21 +52,36 @@ export async function addCow(tagNum, breed, dob, medRecord, weight, sex) {
 }
 
 export async function updateCow(tagNum, weight, medRecord) {
-    await db.collection("cows").doc(tagNum).update({
+    await db.collection(auth.currentUser.uid).doc("herd").collection("cows").doc(tagNum).update({
         medRecord: medRecord,
         weight: weight
     })
 }
 
 export async function archiveCow(tagNum) {
-    await db.collection("cows").doc(tagNum).update({
+    await db.collection(auth.currentUser.uid).doc("herd").collection("cows").doc(tagNum).update({
         archived: true,
         archivedDate: new Date()
     })
+
+    getMilkRecordings(tagNum)
+        .then(records => {
+            records.forEach(record => {
+                db.collection(auth.currentUser.uid).doc("herd").collection("milkRecordings").doc(record.id).delete()
+            })
+        }).catch(error => {
+            
+        })
+        
+    
+}
+
+export async function deleteCow(tagNum){
+    await db.collection(auth.currentUser.uid).doc("herd").collection("cows").doc(tagNum).delete()
 }
 
 export async function addCalving(tagNum, date, notes) {
-    await db.collection("calving").doc().set({
+    await db.collection(auth.currentUser.uid).doc("herd").collection("calving").doc().set({
         tagNum: tagNum,
         date: date,
         notes: notes,
@@ -78,9 +93,9 @@ export async function getCalving(tagNum) {
     let docs
 
     if(tagNum) {
-        docs = await db.collection("calving").orderBy('date').where("tagNum", "==", tagNum).get()
+        docs = await db.collection(auth.currentUser.uid).doc("herd").collection("calving").orderBy('date').where("tagNum", "==", tagNum).get()
     } else {
-        docs = await db.collection("calving").orderBy('date').where("archived", "==", false).get()
+        docs = await db.collection(auth.currentUser.uid).doc("herd").collection("calving").orderBy('date').where("archived", "==", false).get()
     }
     
     if(docs.empty) return []
@@ -99,7 +114,7 @@ export async function getCalving(tagNum) {
 export async function getArchivedCalving() {
     let docs = []
 
-    docs = await db.collection("calving").orderBy('date').where("archived", "==", true).get()
+    docs = await db.collection(auth.currentUser.uid).doc("herd").collection("calving").orderBy('date').where("archived", "==", true).get()
 
     let calvingData = []
     docs.forEach(doc => {
@@ -112,18 +127,30 @@ export async function getArchivedCalving() {
 }
 
 export async function archiveCalving(id) {
-    await db.collection("calving").doc(id).update({
+    await db.collection(auth.currentUser.uid).doc("herd").collection("calving").doc(id).update({
         archived: true,
         archivedDate: new Date()
     })
 }
 
+export async function addMilkRecording(tagNum, date, milkProduced, protein, butterfat, cellCount, notes) {
+     await db.collection(auth.currentUser.uid).doc("herd").collection("milkRecordings").add({
+        tagNum: tagNum,
+        date: date,
+        milkProduced: milkProduced,
+        protein: protein,
+        butterfat: butterfat, 
+        cellCount: cellCount,
+        notes: notes
+    }) 
+}
+
 export async function getMilkRecordings(tagNum) {
     let docs 
     if(tagNum) {
-        docs = await db.collection("milkRecordings").where("tagNum", "==", tagNum).get()
+        docs = await db.collection(auth.currentUser.uid).doc("herd").collection("milkRecordings").where("tagNum", "==", tagNum).get()
     } else {
-        docs = await db.collection("milkRecordings").get()
+        docs = await db.collection(auth.currentUser.uid).doc("herd").collection("milkRecordings").get()
     }
 
     if(docs.empty) return []

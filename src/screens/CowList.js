@@ -48,7 +48,8 @@ function CowList ({navigation}){
           text: "Add Cow",
           icon: <MaterialCommunityIcons name="cow" size={25} color={"white"} />,
           name: "fabAddCow",
-          position: 1
+          position: 1,
+          color: theme.colors.primary
         },
     ];
 
@@ -111,8 +112,9 @@ function CowList ({navigation}){
             <FloatingAction 
                 actions={actions}
                 onPressItem={name => handleFabClick(name) }
-                style={{backgroundColor: "red"}}
+                color={theme.colors.primary}
             />
+
         </>
     )
 }    

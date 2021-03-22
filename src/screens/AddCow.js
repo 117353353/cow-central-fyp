@@ -1,5 +1,5 @@
 import React, { useState} from "react"
-import { StyleSheet, TouchableOpacity } from "react-native" // https://reactnative.dev/
+import { StyleSheet, TouchableOpacity, ToastAndroid } from "react-native" // https://reactnative.dev/
 import { Card, Input, Button, BottomSheet, ListItem } from "react-native-elements" // https://reactnativeelements.com/
 import { FontAwesome } from '@expo/vector-icons'
 import { addCow } from "src/firestore"
@@ -21,13 +21,14 @@ function AddCow() {
 
     const navigation = useNavigation();
 
-    const breedList = ["Fresian", "Charolais", "Angus", "Jersey", "Hereford", "Limousin", "Aubrac", "Saler", "Shorthorn", "Simmental", "Parthenais"]
+    const breedList = ["Friesian", "Charolais", "Angus", "Jersey", "Hereford", "Limousin", "Aubrac", "Saler", "Shorthorn", "Simmental", "Parthenais"]
     const sexList = ["Male", "Female"]
 
     //This function uses tag number as the id for the documents created in the database and creates the rows required to store the data
     function add() {
         addCow(tagNum, breed, dob, medRecord, parseFloat(weight), sex)
             .then(() => {
+                ToastAndroid.show('Added Successfully', ToastAndroid.SHORT)
                 navigation.goBack()
             }).catch(error => {
                 alert(error.message)

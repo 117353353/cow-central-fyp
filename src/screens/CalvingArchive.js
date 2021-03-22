@@ -23,14 +23,16 @@ function CalvingArchive() {
     }
 
     const renderItem = ({ item }) => (
-        <Card style={styles.item}>
+        <Card style={styles.item} key={item.id}>
             <View style={styles.row}>
                 <View style={styles.column}>
+                    <Text style={styles.label}>Tag Num</Text>
                     <Text style={styles.label}>Date</Text>
                     <Text style={styles.label}>Archived Date</Text>
                     <Text style={styles.label}>Notes</Text>
                 </View>
                 <View style={styles.column}>
+                    <Text>{item.tagNum}</Text>
                     <Text>{formatDate(item.date.toDate())}</Text>
                     <Text>{formatDate(item.archivedDate.toDate())}</Text>
                     <Text>{item.notes}</Text>
@@ -46,7 +48,6 @@ function CalvingArchive() {
                 <FlatList
                     data={calving}   
                     renderItem={renderItem}
-                    keyExtractor={item => item.tagNum}
                     style={styles.list}
                 /> 
             </MyScrollView>     

@@ -1,20 +1,21 @@
 //Importing components from various libraries/packages. 
 import React, { useState } from "react"
+import { ToastAndroid } from "react-native"
 import { Card, Input, Text, Button } from "react-native-elements"
-import { db } from "src/firebase"
 import MyScrollView from "components/MyScrollView"
-
 import DatePicker from "components/DatePicker"
+
+import { addMilkRecording } from "../firestore"
 
 //use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
 // They are updated automatically as the user types into the form. 
 
 function AddMilkRecording({navigation, route}) {
     const [date, setDate] = useState(new Date())
-    const [milkProduced, setMilkProduced] = useState(0)
-    const [protein, setProtein] = useState(0)
-    const [butterfat, setButterfat] = useState(0)
-    const [cellCount, setCellCount] = useState(0)
+    const [milkProduced, setMilkProduced] = useState("")
+    const [protein, setProtein] = useState("")
+    const [butterfat, setButterfat] = useState("")
+    const [cellCount, setCellCount] = useState("")
     const [notes, setNotes] = useState("")
 
 //This function then creates the necessary fields required in the databse to store the correct information relating to a milk recording
@@ -24,19 +25,13 @@ function AddMilkRecording({navigation, route}) {
     // 4. .then if succesful | .catch if failed. 
 
     function addRecord() {
-        db.collection("milkRecordings").doc(/*This is left empty, so Firebase generates a random id for the document*/).set({
-            tagNum: route.params.tagNum,
-            date: date,
-            milkProduced: parseFloat(milkProduced),
-            protein: parseFloat(protein),
-            butterfat: parseFloat(butterfat),
-            cellCount: parseFloat(cellCount),
-            notes: notes
-        }).then(() => {
-            navigation.goBack()
-        }).catch(error => {
-            alert(error.mesage)
-        })
+        addMilkRecording(route.params.tagNum, date, parseFloat(milkProduced), parseFloat(protein), parseFloat(butterfat), parseFloat(cellCount), notes)
+            .then(() => {
+                ToastAndroid.show('Added Successfully', ToastAndroid.SHORT)
+                navigation.goBack()
+            }).catch(error => {
+                alert(error.message)
+            })
     }
 
     return (

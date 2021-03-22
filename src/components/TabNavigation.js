@@ -29,10 +29,12 @@ function TabNavigation() {
             initialRouteName="Home" 
             tabBarPosition="bottom"
             tabBarOptions={{
+                style: { backgroundColor: "white"},
                 showIcon: true,
                 showLabel: false,
                 activeTintColor: theme.colors.primary,
-                inactiveTintColor: "grey"
+                inactiveTintColor: "grey",
+                
             }}
         >
             <Tab.Screen name="Home" component={Home} options={{

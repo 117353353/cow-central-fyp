@@ -25,8 +25,8 @@ function Picker({value, setValue, options, label}) {
             </TouchableOpacity>
 
             <BottomSheet isVisible={listVisible}>
-                {options.map(option => (
-                    <ListItem onPress={() => handleClick(option)}>
+                {options.map((option, index) => (
+                    <ListItem onPress={() => handleClick(option)} key={index}>
                         <ListItem.Content>
                             <ListItem.Title>{option}</ListItem.Title>
                         </ListItem.Content>

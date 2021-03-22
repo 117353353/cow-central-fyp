@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from "react"
-import { StyleSheet, TouchableNativeFeedback, Alert, FlatList, View, TouchableOpacity } from "react-native"
+import { StyleSheet, TouchableNativeFeedback, Alert, FlatList, View, TouchableOpacity, ToastAndroid } from "react-native"
 import { Card, Text, Button, Input, Divider, ThemeContext } from "react-native-elements"
 import { FloatingAction } from "react-native-floating-action"
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -8,7 +8,6 @@ import { Entypo } from '@expo/vector-icons'
 import { db } from "src/firebase"
 import MyScrollView from "components/MyScrollView"
 import Calving from "screens/Calving"
-import MilkRecording from "screens/MilkRecording"
 import { archiveCow, getCow, updateCow, getCalving, getMilkRecordings } from "src/firestore"
 import { formatDate } from "src/helpers"
 
@@ -85,7 +84,7 @@ function CowDetails({navigation, route}) {
     function update() {
         updateCow(tagNum, weight, medRecord)
             .then(() => {
-                alert("Updated Successfully")
+                ToastAndroid.show('Updated successfully', ToastAndroid.SHORT)
             }).catch(error => {
                 alert(error.message)
             })
@@ -109,13 +108,15 @@ function CowDetails({navigation, route}) {
           text: "Add Calving Date",
           icon: <MaterialCommunityIcons name="baby-bottle-outline" size={iconSize} color={iconColor} />,
           name: "fabCalving",
-          position: 1
+          position: 1,
+          color: theme.colors.primary
         },
         {
           text: "Add Milk Recording",
           icon: <Entypo name="bucket" size={iconSize} color={iconColor} />,
           name: "fabRecording",
-          position: 2
+          position: 2,
+          color: theme.colors.primary
         },
     ]
 
@@ -283,8 +284,8 @@ function CowDetails({navigation, route}) {
                 
 
                 <TouchableNativeFeedback onPress={deleteWarning}>
-                    <Card style={styles.deleteBtn} backgroundColor="red">
-                        <Text style={{textAlign: "center", fontSize: 23, color: "white"}}>Archive Cow</Text>  
+                    <Card style={styles.deleteBtn} backgroundColor="#f52f2f">
+                        <Text style={{textAlign: "center", fontSize: 18, color: "white"}}>Archive Cow</Text>  
                     </Card>
                 </TouchableNativeFeedback>
             </MyScrollView>
@@ -294,6 +295,7 @@ function CowDetails({navigation, route}) {
                 <FloatingAction 
                     actions={actions}
                     onPressItem={name => handleFabClick(name) }
+                    color={theme.colors.primary}
                 />
             }
 
@@ -311,8 +313,7 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     deleteBtn: {
-        padding: 0,
-        backgroundColor: "red",
+        backgroundColor: "#f54242",
     },
     bold: {
         fontWeight: "bold",

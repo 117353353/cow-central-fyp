@@ -1,10 +1,10 @@
 import React, {useState, useEffect} from "react" 
-import { FlatList, StyleSheet, View } from "react-native"
-import { Card, Text} from "react-native-elements"
+import { FlatList, StyleSheet, View, ToastAndroid } from "react-native"
+import { Card, Text, Button} from "react-native-elements"
 import { FontAwesome } from '@expo/vector-icons'; 
 import { FloatingAction } from "react-native-floating-action"
 
-import { getArchivedCows } from "src/firestore"
+import { getArchivedCows, deleteCow } from "src/firestore"
 import { formatDate } from "src/helpers"
 import MyScrollView from "components/MyScrollView"
 import ScreenTitle from "components/ScreenTitle"
@@ -23,6 +23,15 @@ function CowArchive() {
         }).catch(error => {
             alert(error.message)
         })
+    }
+
+    function remove(tagNum) {
+        deleteCow(tagNum)
+            .then(() => {
+                ToastAndroid.show('Cow Deleted', ToastAndroid.SHORT)
+            }).catch(error => {
+                alert(error.message)
+            })
     }
 
     const renderItem = ({ item }) => (
@@ -46,6 +55,7 @@ function CowArchive() {
                     <Text>{item.medRecord}</Text>
                     <Text>{formatDate(item.archivedDate.toDate())}</Text>
                 </View>    
+                <Button title="delete" onPress={() => remove(item.tagNum)} />
             </View>     
         </Card>
     )

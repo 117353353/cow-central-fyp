@@ -22,7 +22,7 @@ Reference = https://reactnavigation.org/docs/stack-navigator/ */
 
 function StackNavigation() {
     return(
-        <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="Signin" screenOptions={{headerShown: false}}>
             <Stack.Screen name="Main" component={TabNavigation} />
             <Stack.Screen name="Signin" component={Signin} />
             <Stack.Screen name="Add Cow"  options={{headerShown: true}} component={AddCow} />

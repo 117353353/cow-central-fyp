@@ -10,16 +10,22 @@ import StackNavigation from "components/StackNavigation"
 // You can set default colors and component attributes here. https://reactnavigation.org/docs/themes/*/
 const theme = {
     colors: {
-      primary: "#2b96d9",
-      secondary: "orange"
+      primary: "#2EA043",
+      secondary: "orange",
+      background: "lightgrey"
     },
     button: {
       
     },
     Card: {
       containerStyle: {
-      backgroundColor:"#e6f2ff"
-        
+        borderColor: "#2EA043",
+        borderWidth: 1,
+      },
+      style: {
+
+        borderRadius: 5,
+        elevation: 5
       },
     },
     Input: {
@@ -41,7 +47,7 @@ export default function Main() {
   return (
     // https://reactnativeelements.com/docs/customization/
     <ThemeProvider theme={theme}>   
-      <NavigationContainer>
+      <NavigationContainer theme={theme}>
         <StackNavigation />
       </NavigationContainer>
       <StatusBar style="light" translucent={false}/> 

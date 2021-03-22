@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { StyleSheet, FlatList, View, Alert } from "react-native"
+import { StyleSheet, FlatList, View, Alert, ToastAndroid } from "react-native"
 import { Text, Card, Button} from "react-native-elements"
 import { FontAwesome } from '@expo/vector-icons' 
 import * as Calendar from 'expo-calendar'
@@ -14,6 +14,55 @@ function CalvingCalendar({route, tagNum}) {
     useEffect(() => {
         loadData()
     }, [])
+
+    useEffect(() => {
+        (async () => {
+          const { status } = await Calendar.requestCalendarPermissionsAsync();
+          if (status === 'granted') {
+            const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+            if(calendars.length == 0) {
+                createCalendar()
+            }   
+          }
+        })();
+    }, []);
+    
+    async function createCalendar() {
+        const defaultCalendarSource =
+          Platform.OS === 'ios'
+            ? await getDefaultCalendarSource()
+            : { isLocalAccount: true, name: 'Cow Central Calendar' };
+        const newCalendarID = await Calendar.createCalendarAsync({
+          title: 'Cow Central Calendar',
+          color: 'blue',
+          entityType: Calendar.EntityTypes.EVENT,
+          sourceId: defaultCalendarSource.id,
+          source: defaultCalendarSource,
+          name: 'internalCalendarName',
+          ownerAccount: 'personal',
+          accessLevel: Calendar.CalendarAccessLevel.OWNER,
+        });
+    }
+
+    async function getDefaultCalendarSource() {
+        const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+        const defaultCalendars = calendars.filter(each => each.source.name === 'Default');
+        return defaultCalendars[0].source;
+    }
+
+    async function createEvent(title, date) {
+        try {
+            const res = await Calendar.createEventAsync("1", {
+              endDate: date,
+              startDate: date,
+              title: title,
+              allDay: true
+            })
+            ToastAndroid.show('Added to Calendar', ToastAndroid.SHORT)
+          } catch (e) {
+            console.log({ e });
+          }
+    }
 
     function loadData() {
         getCalving()
@@ -59,7 +108,7 @@ function CalvingCalendar({route, tagNum}) {
                 </View>
                 <View style={styles.buttonColumn}>
                     <Button 
-                        onPress={() => createCalendar()}
+                        onPress={() => createEvent(`Cow Number ${item.tagNum} is due to calve today.`, item.date)}
                         icon={<FontAwesome name="calendar-plus-o" size={24} color="white"/>}
                         buttonStyle={{marginRight: 5, height: 50}}
                     />

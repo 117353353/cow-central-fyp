@@ -22,7 +22,7 @@ function Settings({navigation}) {
     return (
         <MyScrollView>
             <Card containerStyle={{padding: 0}} style={{padding: 0}}>
-                <ListItem style={styles.listItem} onPress={() => navigation.navigate("Cow Archive")}>
+                <ListItem style={styles.listItem} onPress={() => navigation.navigate("Cow Archive")} bottomDivider>
                     <MaterialCommunityIcons name="cow" style={styles.icon}/>
                     <ListItem.Content>
                         <ListItem.Title>Cow Archive</ListItem.Title>
