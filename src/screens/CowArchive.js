@@ -29,6 +29,7 @@ function CowArchive() {
         deleteCow(tagNum)
             .then(() => {
                 ToastAndroid.show('Cow Deleted', ToastAndroid.SHORT)
+                loadData()
             }).catch(error => {
                 alert(error.message)
             })

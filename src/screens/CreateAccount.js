@@ -3,6 +3,7 @@ import React, { useState, useContext } from "react"
 import { StyleSheet, ImageBackground } from "react-native"
 import { ThemeContext, Card, Input, Button, Text } from "react-native-elements"
 import { auth } from 'src/firebase'
+import { ToastAndroid } from "react-native"
 
 //creating variables
 function CreateAccount({navigation}){
@@ -16,7 +17,7 @@ function CreateAccount({navigation}){
     function signUp(){
         auth.createUserWithEmailAndPassword(email, password)
             .then(() => {
-                alert("Account with email " + email + " created successfully!")
+                ToastAndroid.show("Account with email " + email + " created successfully!", ToastAndroid.SHORT)
                 navigation.navigate("Main")
             }).catch(error => {
                 alert(error.message)

@@ -134,12 +134,10 @@ function CowDetails({navigation, route}) {
         <>
             <View style={styles.row}>
                 <View style={styles.column}>
-                    <Text style={styles.bold}>Tag Number</Text>
                     <Text style={styles.bold}>Calving Date</Text>    
                     <Text style={styles.bold}>Notes</Text>                         
                 </View>
                 <View style={styles.column}>
-                    <Text style={styles.text}>{item.tagNum}</Text>
                     <Text style={styles.text}>{formatDate(item.date)}</Text>
                     <Text style={styles.text}>{item.notes}</Text>     
                 </View>    
@@ -150,7 +148,6 @@ function CowDetails({navigation, route}) {
     const milkingItem = ({ item }) => (
                 <View style={styles.row}>
                     <View style={styles.column}>
-                        <Text style={styles.bold}>Tag Num</Text> 
                         <Text style={styles.bold}>Date</Text> 
                         <Text style={styles.bold}>Milk Volume</Text>
                         <Text style={styles.bold}>Protein</Text>
@@ -159,7 +156,6 @@ function CowDetails({navigation, route}) {
                         <Text style={styles.bold}>Notes</Text>
                     </View>
                     <View style={styles.column}>
-                        <Text style={styles.text}>{item.tagNum}</Text>
                         <Text style={styles.text}>{formatDate(item.date)}</Text> 
                         <Text style={styles.text}>{item.milkProduced}</Text>
                         <Text style={styles.text}>{item.protein}</Text>

@@ -14,16 +14,12 @@ const theme = {
       secondary: "orange",
       background: "lightgrey"
     },
-    button: {
-      
-    },
     Card: {
       containerStyle: {
         borderColor: "#2EA043",
         borderWidth: 1,
       },
       style: {
-
         borderRadius: 5,
         elevation: 5
       },
@@ -39,7 +35,7 @@ const theme = {
         color: "#1c1c1c"
       }
     }
-  };
+};
 
 export default function Main() {
   LogBox.ignoreLogs(['Setting a timer', 'VirtualizedLists', 'RNDatePickerAndroid.dismiss'])

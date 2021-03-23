@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from "react" 
 import { FlatList, StyleSheet, View } from "react-native"
-import { Card, Text} from "react-native-elements"
-
-import { getArchivedCalving } from "src/firestore"
+import { Card, Text, Button } from "react-native-elements"
+import { ToastAndroid } from "react-native"
+import { getArchivedCalving, deleteCalving } from "src/firestore"
 import { formatDate } from "src/helpers"
 import MyScrollView from "components/MyScrollView"
 
@@ -22,6 +22,16 @@ function CalvingArchive() {
             })
     }
 
+    function remove(id) {
+        deleteCalving(id)
+            .then(() => {
+                ToastAndroid.show('Calving Record Deleted', ToastAndroid.SHORT)
+                loadData()
+            }).catch(error => {
+                alert(error.message)
+            })
+    }
+
     const renderItem = ({ item }) => (
         <Card style={styles.item} key={item.id}>
             <View style={styles.row}>
@@ -36,7 +46,8 @@ function CalvingArchive() {
                     <Text>{formatDate(item.date.toDate())}</Text>
                     <Text>{formatDate(item.archivedDate.toDate())}</Text>
                     <Text>{item.notes}</Text>
-                </View>    
+                </View> 
+                <Button title="delete" onPress={() => remove(item.id)} />   
             </View>     
         </Card>
     )
