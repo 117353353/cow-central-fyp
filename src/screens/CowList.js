@@ -9,16 +9,24 @@ import MyScrollView from "src/components/MyScrollView"
 import { formatDate } from "src/helpers"
 
 function CowList ({navigation}){
+    // Cow records loaded from database are stored here. 
     const [cows, setCows] = useState([])  
+
+    // Filtered version of cows stored here. 
     const [filteredCows, setFilteredCows] = useState([]) 
+
+    // Stores text typed into search box. 
     const [search, setSearch] = useState("")
 
+    // Gives access to theme from Main.js
     const { theme } = useContext(ThemeContext)
 
+    // Loads data after component loads. 
     useEffect(() => {
         loadData()
     }, [])
 
+    // Loads cow records from database.
     function loadData() {
         setSearch("")
         getCows()
@@ -36,13 +44,20 @@ function CowList ({navigation}){
     useEffect(() => {
         if(search.length > 0) {
             let tempSearch = search.toLowerCase()
+            // If any of these comparisons match the cow won't be filtered out. 
+            // .includes() checks if any part of a string matches another string. https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
             let result = cows.filter(cow => cow.tagNum.includes(tempSearch) || cow.breed.toLowerCase().includes(tempSearch) || cow.weight == tempSearch || cow.sex.toLowerCase().includes(tempSearch) || formatDate(cow.dob).includes(tempSearch) || cow.medRecord.toLowerCase().includes(tempSearch))
+            
+            // result contains a filtered version of the cows list. 
+            // Remaining cows matched at least one of the comparisons.  
             setFilteredCows(result)
         } else {
+            // If search.length is 0 (search box is empty) then we set filtered cows to the full list of cows. 
             setFilteredCows(cows)
         }
     }, [search])
    
+    // Buttons inside floating action button
     const actions = [
         {
           text: "Add Cow",
@@ -53,13 +68,14 @@ function CowList ({navigation}){
         },
     ];
 
+    // Handles floating action button clicks. 
     function handleFabClick(name) {
         if(name == "fabAddCow") {
             navigation.navigate("Add Cow")
         } 
     }
 
- // "item" is a single cow. 
+ // Flatlist uses this to display each cow record. "item" is a single cow. 
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => navigation.navigate("Cow Details", {tagNum: item.tagNum})}>
             <Card style={styles.item}>
@@ -73,12 +89,12 @@ function CowList ({navigation}){
                         <Text style={styles.bold}>Med Record</Text>
                     </View>
                     <View style={styles.column}>
-                        <Text style={styles.text}>{item.tagNum}</Text>
-                         <Text style={styles.text}>{formatDate(item.dob)}</Text>  
-                        <Text style={styles.text}>{item.breed}</Text>
-                        <Text style={styles.text}>{item.sex}</Text>
-                        <Text style={styles.text}>{item.weight} kg</Text>
-                        <Text style={styles.text}>{item.medRecord}</Text>
+                        <Text>{item.tagNum}</Text>
+                         <Text>{formatDate(item.dob)}</Text>  
+                        <Text>{item.breed}</Text>
+                        <Text>{item.sex}</Text>
+                        <Text>{item.weight} kg</Text>
+                        <Text>{item.medRecord}</Text>
                     </View>    
                 </View>     
             </Card>
@@ -89,6 +105,7 @@ function CowList ({navigation}){
         <>
             <MyScrollView onRefresh={loadData}>    
                 <Card containerStyle={{padding: 0}}>
+                    {/*https://reactnativeelements.com/docs/searchbar/*/}
                     <SearchBar 
                         containerStyle={{margin: 0}}
                         value={search}
@@ -100,11 +117,18 @@ function CowList ({navigation}){
                         lightTheme
                     />
                 </Card>
-                {cows.length==0 && <Card><Text style={{textAlign: "center"}}>No Cows Found!</Text></Card>}  
+                
+                {   // If there are no cows we display this text. 
+                    cows.length==0 && 
+                    <Card>
+                        <Text style={{textAlign: "center"}}>No Cows Found!</Text>
+                    </Card>
+                }  
+                
                 <FlatList
                     data={filteredCows}   
                     renderItem={renderItem}
-                    keyExtractor={item => item.tagNum}
+                    keyExtractor={item => item.tagNum} // Flatlist wants a unique key for each item, so we tell it to use each cows tagNum. 
                     style={styles.list}
                 /> 
             </MyScrollView>
@@ -119,6 +143,7 @@ function CowList ({navigation}){
     )
 }    
 
+//This details the styling and correct sizing required for this page. reference= https://reactnative.dev/docs/stylesheet
 const styles = StyleSheet.create({
     fab: {
         position: "absolute",
@@ -132,9 +157,7 @@ const styles = StyleSheet.create({
     item: {
         display: "flex",
     },
-    text: {
-        
-    },
+
     bold: {
         fontWeight: "bold"
     }, 
@@ -148,10 +171,6 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         flex: 1
-    },
-    deleteBtn: {
-       
-
     },
     cardHeader: {
         paddingBottom: 10,

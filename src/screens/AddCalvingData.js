@@ -6,15 +6,17 @@ import MyScrollView from "components/MyScrollView"
 import DatePicker from "components/DatePicker"
 import { addCalving } from "src/firestore"
 
+// Route contains params passed with navigation. https://reactnavigation.org/docs/params/
 function AddCalvingData({route, navigation}) {
     const [date, setDate] = useState(new Date())
     const [notes, setNotes] = useState("")
     const tagNum = route.params.tagNum
 
+    //function for adding the record to the database 
     function addRecord() {
         addCalving(tagNum, date, notes)
             .then(() => {
-                navigation.goBack()
+                navigation.goBack() // Navigates back to previous page. 
                 ToastAndroid.show('Added successfully', ToastAndroid.SHORT)
             }).catch(error => {
                 alert(error.message)

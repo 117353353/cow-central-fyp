@@ -3,7 +3,7 @@ import { TouchableOpacity } from "react-native"
 import { BottomSheet, Input, ListItem } from "react-native-elements"
 import { FontAwesome } from '@expo/vector-icons'
 
-// https://reactnativeelements.com/docs/bottomsheet/
+
 function Picker({value, setValue, options, label}) {
     const [listVisible, setListVisible] = useState(false)
 
@@ -14,6 +14,7 @@ function Picker({value, setValue, options, label}) {
 
     return (
         <>
+            { /* Clicking this input displays the bottomSheet. The input always displays the currently selected value*/}
             <TouchableOpacity onPress={() => setListVisible(true)}>
                 <Input 
                     label={label}
@@ -24,6 +25,7 @@ function Picker({value, setValue, options, label}) {
                 />
             </TouchableOpacity>
 
+            { /* https://reactnativeelements.com/docs/bottomsheet/ */ }
             <BottomSheet isVisible={listVisible}>
                 {options.map((option, index) => (
                     <ListItem onPress={() => handleClick(option)} key={index}>

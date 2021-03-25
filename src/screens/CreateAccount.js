@@ -1,7 +1,7 @@
 //Import libraries
-import React, { useState, useContext } from "react"
+import React, { useState } from "react"
 import { StyleSheet, ImageBackground } from "react-native"
-import { ThemeContext, Card, Input, Button, Text } from "react-native-elements"
+import {  Card, Input, Button, Text } from "react-native-elements"
 import { auth } from 'src/firebase'
 import { ToastAndroid } from "react-native"
 
@@ -9,8 +9,6 @@ import { ToastAndroid } from "react-native"
 function CreateAccount({navigation}){
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
-    const { theme } = useContext(ThemeContext)
 
     //function build into firebase 
     //https://firebase.google.com/docs/auth/web/password-auth
@@ -27,6 +25,7 @@ function CreateAccount({navigation}){
     const image = require("../assets/background.jpeg")
 
     return (
+        // https://reactnative.dev/docs/imagebackground
         <ImageBackground source={image} style={styles.background} style={{flexDirection: "column", flex: 1}}>
             <Text style={{textAlign: "center", marginTop: 40, marginBottom: 25, color: "white", fontSize: 25, fontWeight: "bold", textShadowColor: "black", textShadowRadius: 50}}>Welcome to Cow Central!</Text>
             <Card>          
@@ -46,6 +45,8 @@ function CreateAccount({navigation}){
                 />  
                 
                 <Button title="Create Account" onPress={signUp}/>    
+
+                {/* Navigates to Signin component */}
                 <Text style={{textAlign: "center", marginTop: 20, marginBottom: 5}} onPress={() => navigation.navigate("Signin")}>Existing Account?</Text>
             </Card>
         </ImageBackground>
@@ -53,14 +54,10 @@ function CreateAccount({navigation}){
 }
 
 const styles = StyleSheet.create({
-    textInput: {
-        
-    },
     background: {
         height: "100%",
         width: "100%"  
     }
 })
   
-   
 export default CreateAccount

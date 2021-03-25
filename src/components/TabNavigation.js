@@ -7,7 +7,6 @@ import AddCow from "screens/AddCow"
 import CowList from "screens/CowList"
 import Settings from "screens/Settings" 
 import Home from "screens/Home"
-/* import Calving from "screens/Calving" */
 
 // Icons  The icons displayed for each tab were got from = https://icons.expo.fyi/   */ 
 import { MaterialCommunityIcons } from '@expo/vector-icons'

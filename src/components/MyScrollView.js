@@ -1,6 +1,11 @@
 import React from "react"
 import {ScrollView, SafeAreaView, RefreshControl } from "react-native"
 
+
+// Creates a ScrollView component which we use in various parts of the app. 
+
+// children are components wrapped in MyScrollView tags. 
+// onRefresh is a function to be called when user drags down from top. 
 function MyScrollView({children, onRefresh}) {
     return (
         <ScrollView
@@ -10,7 +15,6 @@ function MyScrollView({children, onRefresh}) {
             }
             contentContainerStyle={{
                 paddingBottom: 15, 
-
             }}
         >
             {children}

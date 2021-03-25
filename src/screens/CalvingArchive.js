@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react"
 import { FlatList, StyleSheet, View } from "react-native"
 import { Card, Text, Button } from "react-native-elements"
 import { ToastAndroid } from "react-native"
+
 import { getArchivedCalving, deleteCalving } from "src/firestore"
 import { formatDate } from "src/helpers"
 import MyScrollView from "components/MyScrollView"
@@ -9,6 +10,7 @@ import MyScrollView from "components/MyScrollView"
 function CalvingArchive() {
     const [calving, setCalving] = useState([])
 
+    // Calls loadData function when component loads. 
     useEffect(() => {
        loadData()
     }, [])
@@ -22,6 +24,7 @@ function CalvingArchive() {
             })
     }
 
+    // Deletes calving record from the database using id. 
     function remove(id) {
         deleteCalving(id)
             .then(() => {
@@ -32,6 +35,7 @@ function CalvingArchive() {
             })
     }
 
+    // How FlatList displays each calving record. item = a single calving record. 
     const renderItem = ({ item }) => (
         <Card style={styles.item} key={item.id}>
             <View style={styles.row}>
@@ -55,6 +59,7 @@ function CalvingArchive() {
     return (
         <>
             <MyScrollView onRefresh={loadData}>
+                { /* If there are no archived calving records, this is displayed */ }
                 {calving.length==0 && <Card><Text style={{textAlign: "center"}}>No archived calving records!</Text></Card>}  
                 <FlatList
                     data={calving}   
@@ -65,6 +70,9 @@ function CalvingArchive() {
         </>
     )
 }
+
+
+//styling for the component reference= https://reactnative.dev/docs/stylesheet
 
 const styles = StyleSheet.create({
     fab: {

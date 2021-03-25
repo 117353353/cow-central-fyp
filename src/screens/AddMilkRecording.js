@@ -1,10 +1,10 @@
 //Importing components from various libraries/packages. 
 import React, { useState } from "react"
 import { ToastAndroid } from "react-native"
-import { Card, Input, Text, Button } from "react-native-elements"
+import { Card, Input, Button } from "react-native-elements"
+
 import MyScrollView from "components/MyScrollView"
 import DatePicker from "components/DatePicker"
-
 import { addMilkRecording } from "../firestore"
 
 //use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
@@ -24,6 +24,7 @@ function AddMilkRecording({navigation, route}) {
     // 3. Adds field tagNum with value of tagNum variable from above. Same for rest. 
     // 4. .then if succesful | .catch if failed. 
 
+    //parsefloat converts string to float which allows for decimal places. 
     function addRecord() {
         addMilkRecording(route.params.tagNum, date, parseFloat(milkProduced), parseFloat(protein), parseFloat(butterfat), parseFloat(cellCount), notes)
             .then(() => {
@@ -83,13 +84,6 @@ function AddMilkRecording({navigation, route}) {
 
                 <DatePicker date={date} setDate={setDate} label="Date"/>
 
-{/*                 <DateTimePicker
-                    value={date}
-                    mode={"date"}
-                    display="default"
-                    onChange={(event, date) => setDate(date)}
-                    style={{marginBottom: 20}}
-                /> */}
                 <Button title="Add Recording" onPress={addRecord} />
             </Card>
         </MyScrollView>

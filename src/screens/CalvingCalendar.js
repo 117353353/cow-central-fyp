@@ -8,13 +8,15 @@ import { getCalving, archiveCalving } from "src/firestore"
 import { formatDate } from "src/helpers"
 import MyScrollView from "components/MyScrollView"
 
-function CalvingCalendar({route, tagNum}) {
+function CalvingCalendar({tagNum}) {
     const [calvingData, setCalvingData] = useState([])
 
     useEffect(() => {
         loadData()
     }, [])
 
+    // https://docs.expo.io/versions/latest/sdk/calendar/
+    //code for adding to calendar on the phone from expo 
     useEffect(() => {
         (async () => {
           const { status } = await Calendar.requestCalendarPermissionsAsync();
@@ -50,6 +52,7 @@ function CalvingCalendar({route, tagNum}) {
         return defaultCalendars[0].source;
     }
 
+    // Takes in a title and a date, then adds an event to your calendar. 
     async function createEvent(title, date) {
         try {
             const res = await Calendar.createEventAsync("1", {
@@ -136,6 +139,8 @@ function CalvingCalendar({route, tagNum}) {
     )
 }
 
+
+//This details the styling and correct sizing required for this page. reference= https://reactnative.dev/docs/stylesheet
 const styles = StyleSheet.create({
     label: {
         fontWeight: "bold"

@@ -1,30 +1,31 @@
 import React, {useState, useEffect} from "react" 
 import { FlatList, StyleSheet, View, ToastAndroid } from "react-native"
 import { Card, Text, Button} from "react-native-elements"
-import { FontAwesome } from '@expo/vector-icons'; 
-import { FloatingAction } from "react-native-floating-action"
 
+//import from other components
 import { getArchivedCows, deleteCow } from "src/firestore"
 import { formatDate } from "src/helpers"
 import MyScrollView from "components/MyScrollView"
-import ScreenTitle from "components/ScreenTitle"
-
 
 function CowArchive() {
     const [cows, setCows] = useState([])
 
+    // Loads data when component loads. 
     useEffect(() => {
         loadData()
     }, [])
 
     function loadData() {
-        getArchivedCows(true).then(cows => {
-            setCows(cows)
-        }).catch(error => {
-            alert(error.message)
-        })
+        // Retrieves archived cows from database. 
+        getArchivedCows(true)
+            .then(cows => {
+                setCows(cows)
+            }).catch(error => {
+                alert(error.message)
+            })
     }
 
+    //function to delte cow from archive
     function remove(tagNum) {
         deleteCow(tagNum)
             .then(() => {
@@ -35,6 +36,7 @@ function CowArchive() {
             })
     }
 
+    //how each item is displayed in the archive
     const renderItem = ({ item }) => (
         <Card style={styles.item}>
             <View style={styles.row}>
@@ -63,6 +65,7 @@ function CowArchive() {
 
     return (
         <MyScrollView onRefresh={loadData}>
+            { /* If there are no archived cows, this is displayed */ }
             {cows.length==0 && <Card><Text style={{textAlign: "center"}}>No archived cows!</Text></Card>}  
             <FlatList
                 data={cows}   
@@ -74,6 +77,8 @@ function CowArchive() {
     )
 }
 
+
+// Styling for the component
 const styles = StyleSheet.create({
     fab: {
         position: "absolute",

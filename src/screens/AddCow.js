@@ -1,12 +1,13 @@
 import React, { useState} from "react"
-import { StyleSheet, TouchableOpacity, ToastAndroid } from "react-native" // https://reactnative.dev/
-import { Card, Input, Button, BottomSheet, ListItem } from "react-native-elements" // https://reactnativeelements.com/
-import { FontAwesome } from '@expo/vector-icons'
-import { addCow } from "src/firestore"
-import DatePicker from "components/DatePicker"
-import MyScrollView from "components/MyScrollView"
-import Picker from "components/Picker"
+import { StyleSheet, ToastAndroid } from "react-native" // https://reactnative.dev/
+import { Card, Input, Button } from "react-native-elements" // https://reactnativeelements.com/
 import { useNavigation } from '@react-navigation/native'
+
+import MyScrollView from "components/MyScrollView"
+import DatePicker from "components/DatePicker"
+import Picker from "components/Picker"
+import { addCow } from "src/firestore"
+
 
 //use state keeps track of variables. Creates the variables and makes them equal to a blank string as default. 
 // They are updated automatically as the user types into the form. 
@@ -19,12 +20,16 @@ function AddCow() {
     const [weight, setWeight] = useState("")  
     const [sex, setSex] = useState("")
 
+    // Gives us access to navigation functionality from this component. 
     const navigation = useNavigation();
 
+    // List of options for Picker. 
     const breedList = ["Friesian", "Charolais", "Angus", "Jersey", "Hereford", "Limousin", "Aubrac", "Saler", "Shorthorn", "Simmental", "Parthenais"]
     const sexList = ["Male", "Female"]
 
-    //This function uses tag number as the id for the documents created in the database and creates the rows required to store the data
+
+    //This function adds the reord to the database
+    //parsefloat converts a string to a float to allow for decimal places
     function add() {
         addCow(tagNum, breed, dob, medRecord, parseFloat(weight), sex)
             .then(() => {
@@ -36,8 +41,9 @@ function AddCow() {
     }
 
     /* These cards are created containing a textimput or datapicker to select the correct information for the cow profile. The card keep
-     everything contained and very presentable on the application. It sets a value for the imput which is assigned to the row in the databse above. The button below then saves the newly created cow
-    to the database. References= https://reactnative.dev/docs/textinput https://www.youtube.com/watch?v=F6r-a389_ac  */
+     everything contained and very presentable on the application. It sets a value for the imput which is assigned to the state variables above. 
+     The button below then saves the newly created cow to the database. 
+     References= https://reactnative.dev/docs/textinput https://www.youtube.com/watch?v=F6r-a389_ac  */
 
     return (
         <MyScrollView>

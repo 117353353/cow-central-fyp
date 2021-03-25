@@ -15,40 +15,39 @@ function Settings({navigation}) {
         auth.signOut()
         navigation.navigate("Signin")
     }
-    
-    const iconColor="black"
-    const iconSize=24
 
     return (
+        //list items navigating to different components
         <MyScrollView>
             <Card containerStyle={{padding: 0}} style={{padding: 0}}>
-                <ListItem style={styles.listItem} onPress={() => navigation.navigate("Cow Archive")} bottomDivider>
+
+                <ListItem onPress={() => navigation.navigate("Cow Archive")} bottomDivider>
                     <MaterialCommunityIcons name="cow" style={styles.icon}/>
                     <ListItem.Content>
                         <ListItem.Title>Cow Archive</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
-                <ListItem style={styles.listItem} onPress={() => navigation.navigate("Calving Archive", {archived: true})} bottomDivider>
+
+                <ListItem onPress={() => navigation.navigate("Calving Archive")} bottomDivider>
                     <MaterialCommunityIcons name="baby-bottle-outline" style={styles.icon}/>
                     <ListItem.Content>
                         <ListItem.Title>Calving Archive</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
-                <ListItem style={styles.listItem} onPress={signOut}>
+
+                <ListItem onPress={signOut}>
                     <AntDesign name="logout" style={styles.icon}/>
                     <ListItem.Content>
                         <ListItem.Title>Sign Out</ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
+
             </Card>
         </MyScrollView>    
     )
 }
 
-const styles = StyleSheet.create({
-    listItem: {
-
-    },  
+const styles = StyleSheet.create({ 
     icon: {
         marginRight: 10,
         fontSize: 30,

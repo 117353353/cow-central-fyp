@@ -7,7 +7,6 @@ import { Entypo } from '@expo/vector-icons'
 
 import { db } from "src/firebase"
 import MyScrollView from "components/MyScrollView"
-import Calving from "screens/Calving"
 import { archiveCow, getCow, updateCow, getCalving, getMilkRecordings } from "src/firestore"
 import { formatDate } from "src/helpers"
 
@@ -23,8 +22,11 @@ function CowDetails({navigation, route}) {
     const [sex, setSex] = useState("")
     const [calvingData, setCalvingData] = useState([])
     const [milkingData, setMilkingData] = useState([])
+
+    // Allows access to theme in Main.js
     const { theme } = useContext(ThemeContext)
 
+    // https://reactnative.dev/docs/alert
     const deleteWarning = () =>
         Alert.alert(
         "Delete Cow " + tagNum,
@@ -36,7 +38,8 @@ function CowDetails({navigation, route}) {
                 style: "cancel"
             },
             { 
-                text: "Archive", onPress: () => handleArchive(tagNum) 
+                text: "Archive", 
+                onPress: () => handleArchive(tagNum) 
             }
         ],
         { cancelable: false }
@@ -90,7 +93,7 @@ function CowDetails({navigation, route}) {
             })
     }
 
-    //function which deletes the cow record from the database  
+    //function which makes archive equal true in the cow record in the database. Sets archived = true.  
     function handleArchive() {
         archiveCow(route.params.tagNum)
             .then(() => {
@@ -103,6 +106,7 @@ function CowDetails({navigation, route}) {
     const iconSize = 25
     const iconColor = "white"
 
+    // Code for the buttons inside the floating action button. https://www.npmjs.com/package/react-native-floating-action
     const actions = [
         {
           text: "Add Calving Date",
@@ -120,51 +124,49 @@ function CowDetails({navigation, route}) {
         },
     ]
 
+    // Handles floating action button clicks. 
     function handleFabClick(name) {
         if(name == "fabCalving") {
             navigation.navigate("Add Calving Data", {tagNum: tagNum})
         } else if(name == "fabRecording") {
             navigation.navigate("Add Milk Recording", {tagNum: tagNum})
-        } else if(name == "fabRefresh") {
-            
-        }
+        } 
     }
 
+    // Flatlist uses this to display each calving record.
     const calvingItem = ({ item }) => (
-        <>
-            <View style={styles.row}>
-                <View style={styles.column}>
-                    <Text style={styles.bold}>Calving Date</Text>    
-                    <Text style={styles.bold}>Notes</Text>                         
-                </View>
-                <View style={styles.column}>
-                    <Text style={styles.text}>{formatDate(item.date)}</Text>
-                    <Text style={styles.text}>{item.notes}</Text>     
-                </View>    
-            </View> 
-        </>
+        <View style={styles.row}>
+            <View style={styles.column}>
+                <Text style={styles.bold}>Calving Date</Text>    
+                <Text style={styles.bold}>Notes</Text>                         
+            </View>
+            <View style={styles.column}>
+                <Text style={styles.text}>{formatDate(item.date)}</Text>
+                <Text style={styles.text}>{item.notes}</Text>     
+            </View>    
+        </View> 
     )
 
+    //flatlist uses this to display each milking record. 
     const milkingItem = ({ item }) => (
-                <View style={styles.row}>
-                    <View style={styles.column}>
-                        <Text style={styles.bold}>Date</Text> 
-                        <Text style={styles.bold}>Milk Volume</Text>
-                        <Text style={styles.bold}>Protein</Text>
-                        <Text style={styles.bold}>Butterfat</Text>
-                        <Text style={styles.bold}>Cell Count</Text>
-                        <Text style={styles.bold}>Notes</Text>
-                    </View>
-                    <View style={styles.column}>
-                        <Text style={styles.text}>{formatDate(item.date)}</Text> 
-                        <Text style={styles.text}>{item.milkProduced}</Text>
-                        <Text style={styles.text}>{item.protein}</Text>
-                        <Text style={styles.text}>{item.butterfat}</Text>
-                        <Text style={styles.text}>{item.cellCount}</Text>
-                        <Text style={styles.text}>{item.notes}</Text>
-                    </View>    
-                </View>     
-
+        <View style={styles.row}>
+            <View style={styles.column}>
+                <Text style={styles.bold}>Date</Text> 
+                <Text style={styles.bold}>Milk Volume</Text>
+                <Text style={styles.bold}>Protein</Text>
+                <Text style={styles.bold}>Butterfat</Text>
+                <Text style={styles.bold}>Cell Count</Text>
+                <Text style={styles.bold}>Notes</Text>
+            </View>
+            <View style={styles.column}>
+                <Text style={styles.text}>{formatDate(item.date)}</Text> 
+                <Text style={styles.text}>{item.milkProduced}</Text>
+                <Text style={styles.text}>{item.protein}</Text>
+                <Text style={styles.text}>{item.butterfat}</Text>
+                <Text style={styles.text}>{item.cellCount}</Text>
+                <Text style={styles.text}>{item.notes}</Text>
+            </View>    
+        </View>     
     )
     
     //Scrollview expands to its content, allowing user to scroll down the page. 
@@ -236,8 +238,10 @@ function CowDetails({navigation, route}) {
                 </Card>
 
                 {
+                    // Calving and milk recording data only displayed if cow is female. 
                     sex == "Female" && 
-                    <>
+                    <>  
+                        {/* Calvings data displayed in this card using a FlatList */} 
                         <Card>
                             <Card.Title style={{color: theme.colors.primary, fontSize: 18}} onPress={loadData}>
                                 Calving
@@ -256,6 +260,8 @@ function CowDetails({navigation, route}) {
                                 /> 
                             }
                         </Card>
+
+                        {/* Milk recording data displayed in this card using a FlatList */} 
                         <Card>
                             <Card.Title style={{color: theme.colors.primary, fontSize: 18}} onPress={loadData}>
                                 Milk Recording
@@ -278,8 +284,7 @@ function CowDetails({navigation, route}) {
 
                 }
                 
-
-                <TouchableNativeFeedback onPress={deleteWarning}>
+                <TouchableNativeFeedback onPress={() => deleteWarning()}>
                     <Card style={styles.deleteBtn} backgroundColor="#f52f2f">
                         <Text style={{textAlign: "center", fontSize: 18, color: "white"}}>Archive Cow</Text>  
                     </Card>
@@ -287,6 +292,10 @@ function CowDetails({navigation, route}) {
             </MyScrollView>
 
             { 
+                /* 
+                    The floating action button only displays if the cow is female, as milking and calving options are not needed for males. 
+                    https://www.npmjs.com/package/react-native-floating-action 
+                */
                 sex == "Female" && 
                 <FloatingAction 
                     actions={actions}
@@ -295,7 +304,6 @@ function CowDetails({navigation, route}) {
                 />
             }
 
-            {/* https://www.npmjs.com/package/react-native-floating-action */}
         </>
     )
 }
